@@ -36,3 +36,24 @@ double pqPairwiseCombs(int nsam) {
 double pqTajimasTheta(double combs, long long int diffs) {
   return diffs / (double)combs;
 }
+
+double pqTajimasD(int nsam, long long int s, double tw, double pi) {
+  double a1, a2, b1, b2, c1, c2, e1, e2, V;
+  
+  a1 = 0;
+  a2 = 0;
+  for (int i = 1; i < nsam; i++) {
+    a1 += 1.0 / i;
+    a2 += 1.0 / (i * i);
+  }
+  
+  b1 = (nsam + 1.0) / (3.0 * (nsam - 1.0));
+  b2 = 2.0 * (nsam * nsam + nsam + 3.0) / (9.0 * nsam * (nsam - 1.0));
+  c1 = b1 - 1.0 / a1;
+  c2 = b2 - (nsam + 2.0) / (a1 * nsam) + a2 / (a1 * a1);
+  e1 = c1 / a1;
+  e2 = c2 / (a1 * a1 + a2);
+  V = e1 * s + e2 * s * (s - 1.0);
+  
+  return (pi - tw) / sqrt(V);
+}
