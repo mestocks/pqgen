@@ -33,7 +33,7 @@ void pqThetaWReset(struct pqThetaW *ptr) {
 // Tajima's theta
 
 void pqThetaPiAdd(struct pqThetaPi *ptr, int nminor) {
-  ptr->pisum += pqPairwiseDiff(ptr->nsam, nminor);
+  ptr->pisum += pqPairwiseDiffs(ptr->nsam, nminor);
   ptr->nsites++;
 }
 
