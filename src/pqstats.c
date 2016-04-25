@@ -10,7 +10,7 @@
   fcol - column number (1-indexed) of the factor over which 
   the stats should be calculated. The default is to output 
   stats per chromosome, but the fourth name column could be used 
-  instead to calculate over some group of features. [default = 0]
+  instead to calculate over some group of features. [default = 1]
   
 */
 
