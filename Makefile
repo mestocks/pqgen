@@ -1,5 +1,5 @@
 name = pqgen
-cmds = pqstats
+cmds = pq-theta
 headers = pq_sfobj pq_sfstats
 libname = lib$(name)
 
