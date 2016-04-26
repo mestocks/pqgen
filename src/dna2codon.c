@@ -17,14 +17,11 @@ chr1      676156  676157  transcript1       0.65   +       G       G
 chr1      676157  676158  transcript1       0.65   +       A       A
 chr1      676158  676159  transcript1       0.65   +       C       C
 chr1      676159  676160  transcript1       0.65   +       G       A
-chr1      676160  676161  transcript1       0.65   +       C       C
-chr1      676161  676162  transcript1       0.65   +       T       T
 
 Example output:
 chr1      676151  676154  transcript1       0.65   +       ATG     ATG
 chr1      676154  676157  transcript1       0.65   +       TCG     TCG
 chr1      676157  676160  transcript1       0.65   +       ACG     ACA
-chr1      676160  676163  transcript1       0.65   +       CTG     CTT
  */
 
 #include <stdio.h>

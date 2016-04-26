@@ -10,17 +10,29 @@
 
 ```bash
 ... | dna2codon
+
+Input:
+chr    start    end    name    score    +|-    nuc.1    nuc.2 ... nuc.n
+
+Output:
+chr    codon.start    codon.end    name    score    +|-    codon.1    codon.2 ... codon.n    
 ```
 
-Take input in bed format, in the form:
+Example input:
 ```bash
-chr    start    end    name    score    strand    nucleotide
+chr1      676151  676152  transcript1       0.65   +       A       A
+chr1      676152  676153  transcript1       0.65   +       T       T
+chr1      676153  676154  transcript1       0.65   +       G       G
+chr1      676154  676155  transcript1       0.65   +       T       T
+chr1      676155  676156  transcript1       0.65   +       C       C
+chr1      676156  676157  transcript1       0.65   +       G       G
+chr1      676157  676158  transcript1       0.65   +       A       A
+chr1      676158  676159  transcript1       0.65   +       C       C
+chr1      676159  676160  transcript1       0.65   +       G       A
 ```
-
-Output is for example:
-
+Example output:
 ```bash
-chr1    0    3    transcipt1    1e10    +    ATG
-chr1    3    6    transcipt1    1e10    +    TCG
-chr1    6    9    transcipt1    1e10    +    ACG
+chr1      676151  676154  transcript1       0.65   +       ATG     ATG
+chr1      676154  676157  transcript1       0.65   +       TCG     TCG
+chr1      676157  676160  transcript1       0.65   +       ACG     ACA
 ```
