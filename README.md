@@ -1,12 +1,11 @@
 # Population and Quantitative Genetic Tools
 
-*Theta-based nucleotide diversity statistics*
-
+### pqtheta
 ```bash
 ... | pq-theta nsam [fcol]
 ```
 
-*Annotation based stats*
+### dna2codon
 
 ```bash
 ... | dna2codon
