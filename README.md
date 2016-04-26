@@ -5,9 +5,11 @@
 ... | pq-theta nsam [fcol]
 ```
 
-###### dna2codon
+##### dna2codon
 
-Convert nucleotide sequences into codons
+```dna2codon```
+
+*Convert nucleotide sequences into codons*
 ```bash
 ... | dna2codon
 
