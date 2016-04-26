@@ -1,8 +1,16 @@
 # Population and Quantitative Genetic Tools
 
-### pqtheta
+##### pqtheta
+*Calculate site frequency based stats*
+
 ```bash
 ... | pq-theta nsam [fcol]
+
+Input:
+chr    start    end    name    nref    nalt
+
+Output:
+chr    region.start    region.end    name    nsam    nsites    seg.sites    thetaW    thetaPi    tajD
 ```
 
 ##### dna2codon
