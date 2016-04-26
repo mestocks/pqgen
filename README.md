@@ -6,10 +6,8 @@
 ```
 
 ##### dna2codon
-
-```dna2codon```
-
 *Convert nucleotide sequences into codons*
+
 ```bash
 ... | dna2codon
 
