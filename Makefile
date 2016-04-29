@@ -39,14 +39,20 @@ $(obj)%.o:	$(src)%.c
 
 ######
 
+ibin = $(INSTALL)$(bin)
 ilib = $(INSTALL)$(lib)
 iinc = $(INSTALL)$(inc)$(libname)/
 
+IBIN = $(addprefix $(ibin),$(cmds))
 IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
 ILIB = $(addprefix $(INSTALL),$(libs))
 
 .PHONY:	install
-install:	$(IINC) $(ILIB)
+install:	$(IBIN) $(IINC) $(ILIB)
+
+$(ibin)%:	$(bin)%
+	mkdir -p $(ibin)
+	cp $^ $@
 
 $(iinc)%.h:	$(inc)%.h
 	mkdir -p $(iinc)
