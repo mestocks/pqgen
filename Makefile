@@ -1,6 +1,6 @@
 name = pqgen
-cmds = pq-theta dna2codon
-headers = pq_sfobj pq_sfstats
+cmds = pq-theta pq-dna2codon pq-test
+headers = pq_genetics pq_sfobj pq_sfstats
 libname = lib$(name)
 
 HOME = $(shell echo $$HOME)/
@@ -37,6 +37,12 @@ $(obj)%.o:	$(src)%.c
 	mkdir -p $(obj)
 	gcc -I $(inc) -c -Wall -fpic -o $@ $^
 
+###
+
+.PHONY:	clean
+clean:
+	-rm $(objs) $(libs)
+
 ######
 
 ibin = $(INSTALL)$(bin)
@@ -62,6 +68,8 @@ $(ilib)%.so:	$(lib)%.so
 	mkdir -p $(ilib)
 	cp $^ $@
 
-.PHONY:	clean
-clean:
-	-rm $(objs) $(libs)
+###
+
+.PHONY:	uninstall
+uninstall:
+	-rm $(IBIN) $(IINC) $(ILIB)

@@ -29,6 +29,7 @@ chr1      676157  676160  transcript1       0.65   +       ACG     ACA
 #include <string.h>
 
 #include <rwk_parse.h>
+#include <pq_genetics.h>
 
 int main(int argc, char **argv) {
 
@@ -66,30 +67,23 @@ int main(int argc, char **argv) {
     }
     
     if (start == 2) {
-	if ('+' == *array[5]) {
-	  printf("%s\t%d\t%s\t%s\t%s\t%s",
-		 array[0], atoi(array[1]) - 2, array[2],
-		 array[3], array[4], array[5]);
-	  for (ismp = 0; ismp < nnuc; ismp++) {
-	    printf("\t%s", codons[ismp]);
-	  }
-	  printf("\n");
+      printf("%s\t%d\t%s\t%s\t%s\t%s",
+	     array[0], atoi(array[1]) - 2, array[2],
+	     array[3], array[4], array[5]);
+      
+      for (ismp = 0; ismp < nnuc; ismp++) {
+	if ('-' == *array[5]) {
+	  pqReverse(codons[ismp]);
+	  pqComplement(codons[ismp]);
 	}
-	else if ('-' == *array[5]) {
-	  printf("%s\t%d\t%s\t%s\t%s\t%s",
-		 array[0], atoi(array[1]) - 2, array[2],
-		 array[3], array[4], array[5]);
-	  for (ismp = 0; ismp < nnuc; ismp++) {
-	    printf("\t%c%c%c", codons[ismp][2], codons[ismp][1], codons[ismp][0]);
-	  }
-	  printf("\n");
-	}
+	printf("\t%s", codons[ismp]);
+      }
+      printf("\n");
       start = 0;
     } else {
       start++;
     }
-    
-    
+        
     irow++;
   }
 
