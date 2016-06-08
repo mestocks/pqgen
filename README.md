@@ -1,6 +1,6 @@
 # Population and Quantitative Genetic Tools
 
-##### pqtheta
+##### pq-theta
 *Calculate site frequency based stats*
 
 ```bash
@@ -13,11 +13,11 @@ Output:
 chr    region.start    region.end    name    nsam    nsites    seg.sites    thetaW    thetaPi    tajD
 ```
 
-##### dna2codon
+##### pq-dna2codon
 *Convert nucleotide sequences into codons*
 
 ```bash
-... | dna2codon
+... | pq-dna2codon
 
 Input:
 chr    start    end    name    score    +|-    nuc.1    nuc.2 ... nuc.n
