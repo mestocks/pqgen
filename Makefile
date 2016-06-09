@@ -13,7 +13,7 @@ bin = bin/
 inc = include/
 lib = lib/
 obj = obj/
-man = share/man/man1/
+man = share/
 src = src/
 
 bins = $(addprefix $(bin),$(cmds))
@@ -55,7 +55,7 @@ iinc = $(INSTALL)$(inc)$(libname)/
 IBIN = $(addprefix $(ibin),$(cmds))
 IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
 ILIB = $(addprefix $(INSTALL),$(libs))
-IMAN = $(addprefix $(iman),pqgen.1)
+IMAN = $(addprefix $(iman),man/man1/pqgen.1)
 
 .PHONY:	install
 install:	$(IBIN) $(IINC) $(ILIB) $(IMAN)
