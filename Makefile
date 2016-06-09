@@ -13,11 +13,13 @@ bin = bin/
 inc = include/
 lib = lib/
 obj = obj/
+man = share/man/man1/
 src = src/
 
 bins = $(addprefix $(bin),$(cmds))
 incs = $(addsuffix .h,$(addprefix $(inc),$(headers)))
 libs = $(lib)$(libname).so
+mans = $(man)pqgen.1
 objs = $(addsuffix .o,$(addprefix $(obj),$(headers)))
 
 ######
@@ -47,14 +49,16 @@ clean:
 
 ibin = $(INSTALL)$(bin)
 ilib = $(INSTALL)$(lib)
+iman = $(INSTALL)$(man)
 iinc = $(INSTALL)$(inc)$(libname)/
 
 IBIN = $(addprefix $(ibin),$(cmds))
 IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
 ILIB = $(addprefix $(INSTALL),$(libs))
+IMAN = $(addprefix $(iman),pqgen.1)
 
 .PHONY:	install
-install:	$(IBIN) $(IINC) $(ILIB)
+install:	$(IBIN) $(IINC) $(ILIB) $(IMAN)
 
 $(ibin)%:	$(bin)%
 	mkdir -p $(ibin)
@@ -68,8 +72,12 @@ $(ilib)%.so:	$(lib)%.so
 	mkdir -p $(ilib)
 	cp $^ $@
 
+$(iman)%.1:	$(man)%.1
+	mkdir -p $(iman)
+	cp $^ $@
+
 ###
 
 .PHONY:	uninstall
 uninstall:
-	-rm $(IBIN) $(IINC) $(ILIB)
+	-rm $(IBIN) $(IINC) $(ILIB) $(IMAN)
