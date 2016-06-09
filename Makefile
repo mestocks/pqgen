@@ -1,5 +1,6 @@
 name = pqgen
 cmds = pq-theta pq-dna2codon pq-test
+docs = pqgen.1 pq-theta.1 pq-dna2codon.1
 headers = pq_genetics pq_sfobj pq_sfstats
 libname = lib$(name)
 
@@ -19,7 +20,7 @@ src = src/
 bins = $(addprefix $(bin),$(cmds))
 incs = $(addsuffix .h,$(addprefix $(inc),$(headers)))
 libs = $(lib)$(libname).so
-mans = $(man)pqgen.1
+mans = $(addprefix $(man),$(docs))
 objs = $(addsuffix .o,$(addprefix $(obj),$(headers)))
 
 ######
@@ -49,13 +50,13 @@ clean:
 
 ibin = $(INSTALL)$(bin)
 ilib = $(INSTALL)$(lib)
-iman = $(INSTALL)$(man)
+iman = $(INSTALL)$(man)man/man1/
 iinc = $(INSTALL)$(inc)$(libname)/
 
 IBIN = $(addprefix $(ibin),$(cmds))
 IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
 ILIB = $(addprefix $(INSTALL),$(libs))
-IMAN = $(addprefix $(iman),man/man1/pqgen.1)
+IMAN = $(addprefix $(iman),$(docs))
 
 .PHONY:	install
 install:	$(IBIN) $(IINC) $(ILIB) $(IMAN)
