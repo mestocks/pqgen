@@ -3,7 +3,7 @@
 
 #include "pq_genetics.h"
 
-void pqComplement(char *codon) {
+void pq_complement(char *codon) {
   int bp;
   for (bp = 0; bp < 3; bp++) {
     switch (codon[bp]) {
@@ -20,7 +20,7 @@ void pqComplement(char *codon) {
   }
 }
 
-void pqReverse(char *codon) {
+void pq_reverse(char *codon) {
   char one  = codon[0];
   char three = codon[2];
   codon[0] = three;

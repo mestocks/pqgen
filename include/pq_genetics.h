@@ -1,7 +1,7 @@
 #ifndef pq_genetics_h__
 #define pq_genetics_h__
 
-extern void pqComplement(char *codon);
-extern void pqReverse(char *codon);
+extern void pq_complement(char *codon);
+extern void pq_reverse(char *codon);
 
 #endif

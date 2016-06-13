@@ -39,8 +39,8 @@ int main(int argc, char **argv) {
   int ncols;
   int start;
   int lwidth = 2048;
-  //const char delim = '\t';
-  char delim = '\t';
+  const char delim = '\t';
+  char old_delim = '\t';
   char buffer[lwidth];
 
   char **array;
@@ -52,8 +52,8 @@ int main(int argc, char **argv) {
   while (fgets(buffer, sizeof(buffer), stdin)) {
 
     if (irow == 0) {
-      //ncols = rwk_countcols(buffer, &delim);
-      ncols = rwkCountCols(buffer, delim);
+      ncols = rwk_countcols(buffer, &delim);
+      //ncols = rwkCountCols(buffer, old_delim);
       array = calloc(ncols, sizeof (char*));
       nnuc = ncols - 6;
       codons = calloc(nnuc, sizeof (char*));
@@ -62,7 +62,8 @@ int main(int argc, char **argv) {
 	codons[ismp][3] = '\0';
       }
     }
-    rwkStrtoArray(array, buffer, &delim);
+    //rwkStrtoArray(array, buffer, &old_delim);
+    rwk_strsplit(array, buffer, &delim);
 
     for (ismp = 0; ismp < nnuc; ismp++) {
       codons[ismp][start] = *array[ismp+6];
@@ -75,8 +76,8 @@ int main(int argc, char **argv) {
       
       for (ismp = 0; ismp < nnuc; ismp++) {
 	if ('-' == *array[5]) {
-	  pqReverse(codons[ismp]);
-	  pqComplement(codons[ismp]);
+	  pq_reverse(codons[ismp]);
+	  pq_complement(codons[ismp]);
 	}
 	printf("\t%s", codons[ismp]);
       }
