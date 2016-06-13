@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
   int ncols;
   int start;
   int lwidth = 2048;
+  //const char delim = '\t';
   char delim = '\t';
   char buffer[lwidth];
 
@@ -51,6 +52,7 @@ int main(int argc, char **argv) {
   while (fgets(buffer, sizeof(buffer), stdin)) {
 
     if (irow == 0) {
+      //ncols = rwk_countcols(buffer, &delim);
       ncols = rwkCountCols(buffer, delim);
       array = calloc(ncols, sizeof (char*));
       nnuc = ncols - 6;
