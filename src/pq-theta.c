@@ -1,6 +1,6 @@
 /*
 
-  ... | pqstats <nsam> [OPTIONS]
+  ... | pq-theta <nsam> [OPTIONS]
 
   <nsam> is a integer representing the total number of alleles 
   in the population. pq-stats expects stdin in bed format, with 

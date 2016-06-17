@@ -14,7 +14,7 @@ bin = bin/
 inc = include/
 lib = lib/
 obj = obj/
-man = share/
+man = doc/
 src = src/
 
 bins = $(addprefix $(bin),$(cmds))
@@ -50,7 +50,7 @@ clean:
 
 ibin = $(INSTALL)$(bin)
 ilib = $(INSTALL)$(lib)
-iman = $(INSTALL)$(man)man/man1/
+iman = $(INSTALL)share/man/man1/
 iinc = $(INSTALL)$(inc)$(libname)/
 
 IBIN = $(addprefix $(ibin),$(cmds))
