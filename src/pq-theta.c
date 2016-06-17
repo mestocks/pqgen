@@ -1,43 +1,59 @@
 /*
 
-  ... | pqstats nsam [fcol]
+  ... | pqstats <nsam> [OPTIONS]
 
-  expects stdin in bed format, with the 5th and 6th columns
-  representing the number of ref and alt alleles respectively:
-  chrom    pos-1    pos    name    nref    nalt
-
-  nsam - total number of alleles in the population
-  fcol - column number (1-indexed) of the factor over which 
-  the stats should be calculated. The default is to output 
-  stats per chromosome, but the fourth name column could be used 
-  instead to calculate over some group of features. [default = 1]
+  <nsam> is a integer representing the total number of alleles 
+  in the population. pq-stats expects stdin in bed format, with 
+  the 5th and 6th columns representing the number of ref and 
+  alt alleles respectively:
   
+    chrom    pos-1    pos    name    nref    nalt
+
+  OPTIONS
+
+  -b <bool>
+    takes values 0 or 1, indicating whether theta values should be 
+    give per base pair or summed over the entire region. [1]
+  
+  -f <int>
+    column number (1-indexed) of the factor over which 
+    the stats should be calculated. The default is to output 
+    stats per chromosome, but the fourth name column could 
+    be used instead to calculate over some group of features. [1]
+
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_parse.h>
 #include <pq_sfobj.h>
+#include <rwk_parse.h>
 #include <pq_sfstats.h>
 
 int main(int argc, char **argv) {
 
-char help[] = "  ... | pqstats nsam [fcol]";
- 
-  int nsam, fcol;
+  char help[] = "  ... | pqstats nsam [OPTIONS]";
 
+  int i;
+  int nsam;
+  int fcol;
+  int perbp;
+  
+  // <cmd> <nsam>
+  fcol = 0;
+  perbp = 1;
   if (argc == 1) {
     printf("%s\n", help);
-  } else if (argc == 2) {
-    nsam = atoi(argv[1]);
-    fcol = 0;
-  } else if (argc == 3) {
-    nsam = atoi(argv[1]);
-    fcol = atoi(argv[2]) - 1;
   } else {
-    printf("%s\n", help);
+    nsam = atoi(argv[1]);
+    for (i = 2; i < argc; i++) {
+      if (strcmp(argv[i], "-b") == 0) {
+	perbp = atoi(argv[i+1]);
+      } else if (strcmp(argv[i], "-f") == 0) {
+	fcol = atoi(argv[i+1]) - 1;
+      }
+    }
   }
   
   int ncols = 6;
@@ -86,11 +102,20 @@ char help[] = "  ... | pqstats nsam [fcol]";
     if (strcmp(array[fcol], factor) != 0) {
       tw_val = thetaW.eval(&thetaW);
       pi_val = thetaPi.eval(&thetaPi);
-      printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
-	     chr, start_region, stop_region, factor,
-	     thetaW.nsam, thetaW.nsites, thetaW.s,
-	     tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
-	     pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+
+      if (perbp == 1) {
+	printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	       chr, start_region, stop_region, factor,
+	       thetaW.nsam, thetaW.nsites, thetaW.s,
+	       tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
+	       pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+      } else {
+	printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	       chr, start_region, stop_region, factor,
+	       thetaW.nsam, thetaW.nsites, thetaW.s,
+	       tw_val, pi_val,
+	       pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+      }
       
       thetaW.reset(&thetaW);
       thetaPi.reset(&thetaPi);
@@ -117,12 +142,20 @@ char help[] = "  ... | pqstats nsam [fcol]";
 
   tw_val = thetaW.eval(&thetaW);
   pi_val = thetaPi.eval(&thetaPi);
-  printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
-	 chr, start_region, stop_region, factor,
-	 thetaW.nsam, thetaW.nsites, thetaW.s,
-	 tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
-	 pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
-
+  if (perbp == 1) {
+    printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	   chr, start_region, stop_region, factor,
+	   thetaW.nsam, thetaW.nsites, thetaW.s,
+	   tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
+	   pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+  } else {
+    printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	   chr, start_region, stop_region, factor,
+	   thetaW.nsam, thetaW.nsites, thetaW.s,
+	   tw_val, pi_val,
+	   pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+  }
+    
   free(array);
   
   return 0; }
