@@ -4,13 +4,26 @@
 *Calculate site frequency based stats*
 
 ```bash
-... | pq-theta nsam [fcol]
+... | pq-theta nsam [OPTIONS]
 
 Input:
 chr    start    end    name    nref    nalt
 
 Output:
 chr    region.start    region.end    name    nsam    nsites    seg.sites    thetaW    thetaPi    tajD
+
+OPTIONS
+
+  -b <bool>
+    takes values 0 or 1, indicating whether theta values should be 
+    give per base pair or summed over the entire region. [1]
+  
+  -f <int>
+    column number (1-indexed) of the factor over which 
+    the stats should be calculated. The default is to output 
+    stats per chromosome, but the fourth name column could 
+    be used instead to calculate over some group of features. [1]
+
 ```
 
 ##### pq-dna2codon
