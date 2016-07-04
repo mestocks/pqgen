@@ -99,8 +99,6 @@ int main(int argc, char **argv) {
       startindex = 1;
     }
 
-    // 
-    
     if (strcmp(array[fcol], factor) != 0) {
       tw_val = thetaW.eval(&thetaW);
       pi_val = thetaPi.eval(&thetaPi);
