@@ -98,6 +98,8 @@ int main(int argc, char **argv) {
       start_region = startpos;
       startindex = 1;
     }
+
+    // 
     
     if (strcmp(array[fcol], factor) != 0) {
       tw_val = thetaW.eval(&thetaW);
@@ -121,6 +123,7 @@ int main(int argc, char **argv) {
       thetaPi.reset(&thetaPi);
       strcpy(factor, array[fcol]);
       start_region = startpos;
+      stop_region = stoppos;
     }
     
     if (nref > 0 && nalt > 0) {
@@ -134,7 +137,6 @@ int main(int argc, char **argv) {
     if (nref + nalt == nsam) {
       thetaW.add(&thetaW, s);
       thetaPi.add(&thetaPi, pi);
-      //printf("%d %lld %lld %lf\n", pi, thetaPi.pisum, thetaPi.nsites, thetaPi.eval(&thetaPi));
       stop_region = stoppos;
     }
     strcpy(chr, array[0]);
