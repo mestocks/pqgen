@@ -1,8 +1,9 @@
 name = pqgen
-cmds = pqgen pq-theta pq-dna2codon
+cmds = pqgen pq-theta pq-codon2nonsyn pq-dna2codon
 docs = pqgen.1 pq-theta.1 pq-dna2codon.1
 headers = pq_genetics pq_sfobj pq_sfstats
 libname = lib$(name)
+info = codon2aa codon2syn
 
 HOME = $(shell echo $$HOME)/
 BASE = $(HOME).local/
@@ -15,6 +16,7 @@ inc = include/
 lib = lib/
 obj = obj/
 man = doc/
+share = share/
 src = src/
 
 bins = $(addprefix $(bin),$(cmds))
@@ -52,14 +54,16 @@ ibin = $(INSTALL)$(bin)
 ilib = $(INSTALL)$(lib)
 iman = $(INSTALL)share/man/man1/
 iinc = $(INSTALL)$(inc)$(libname)/
+ishare = $(INSTALL)share/$(libname)/
 
 IBIN = $(addprefix $(ibin),$(cmds))
 IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
 ILIB = $(addprefix $(INSTALL),$(libs))
 IMAN = $(addprefix $(iman),$(docs))
+ISHARE = $(addprefix $(ishare),$(info))
 
 .PHONY:	install
-install:	$(IBIN) $(IINC) $(ILIB) $(IMAN)
+install:	$(IBIN) $(IINC) $(ILIB) $(IMAN) $(ISHARE)
 
 $(ibin)%:	$(bin)%
 	mkdir -p $(ibin)
@@ -77,8 +81,12 @@ $(iman)%.1:	$(man)%.1
 	mkdir -p $(iman)
 	cp $^ $@
 
+$(ishare)%:	$(share)%
+	mkdir -p $(ishare)
+	cp $^ $@
+
 ###
 
 .PHONY:	uninstall
 uninstall:
-	-rm $(IBIN) $(IINC) $(ILIB) $(IMAN)
+	-rm $(IBIN) $(IINC) $(ILIB) $(IMAN) $(ISHARE)
