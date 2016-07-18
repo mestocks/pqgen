@@ -60,7 +60,6 @@ int main(int argc, char **argv) {
   int lcols = 1024;
   int lwidth = 2048;
   char delim = '\t';
-  char newline = '\n';
   char buffer[lwidth];
 
   char **array;
@@ -81,8 +80,6 @@ int main(int argc, char **argv) {
   pqThetaWInit(&thetaW, nsam);
   pqThetaPiInit(&thetaPi, nsam);
   
-  int coln;
-  char *tmp;
   int startindex = 0;
   while (fgets(buffer, sizeof(buffer), stdin)) {
     rwkStrtoArray(array, buffer, &delim);
@@ -104,13 +101,13 @@ int main(int argc, char **argv) {
       pi_val = thetaPi.eval(&thetaPi);
 
       if (perbp == 1) {
-	printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	printf("%s\t%lld\t%lld\t%s\t%d\t%lli\t%lli\t%lf\t%lf\t%lf\n",
 	       chr, start_region, stop_region, factor,
 	       thetaW.nsam, thetaW.nsites, thetaW.s,
 	       tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
 	       pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
       } else {
-	printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	printf("%s\t%lld\t%lld\t%s\t%d\t%lli\t%lli\t%lf\t%lf\t%lf\n",
 	       chr, start_region, stop_region, factor,
 	       thetaW.nsam, thetaW.nsites, thetaW.s,
 	       tw_val, pi_val,
@@ -143,13 +140,13 @@ int main(int argc, char **argv) {
   tw_val = thetaW.eval(&thetaW);
   pi_val = thetaPi.eval(&thetaPi);
   if (perbp == 1) {
-    printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+    printf("%s\t%lld\t%lld\t%s\t%d\t%lli\t%lli\t%lf\t%lf\t%lf\n",
 	   chr, start_region, stop_region, factor,
 	   thetaW.nsam, thetaW.nsites, thetaW.s,
 	   tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
 	   pqTajimasD(thetaW.nsam, thetaW.s, tw_val, pi_val));
   } else {
-    printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+    printf("%s\t%lld\t%lld\t%s\t%d\t%lli\t%lli\t%lf\t%lf\t%lf\n",
 	   chr, start_region, stop_region, factor,
 	   thetaW.nsam, thetaW.nsites, thetaW.s,
 	   tw_val, pi_val,

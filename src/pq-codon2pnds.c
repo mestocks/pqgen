@@ -82,16 +82,26 @@ int main(int argc, char **argv) {
   
   int i;
   int fcol;
+  char *home;
   char *fname_aa;
   char *fname_syn;
 
-  int default_fcol = 0;
-  char default_fname_aa[] = "share/codon2aa";
-  char default_fname_syn[] = "share/codon2syn";
+  char default_fname_aa[] = ".config/pqgen/codon2aa";
+  char default_fname_syn[] = ".config/pqgen/codon2syn";
+  
+  home = getenv("HOME");
+  
+  char *default_fullpath_aa = malloc(strlen(home) + 2 + strlen(default_fname_aa));
+  char *default_fullpath_syn = malloc(strlen(home) + 2 + strlen(default_fname_syn));
 
+  sprintf(default_fullpath_aa, "%s/%s", home, default_fname_aa);
+  sprintf(default_fullpath_syn, "%s/%s", home, default_fname_syn);
+  
+  int default_fcol = 0;
+  
   fcol = default_fcol;
-  fname_aa = default_fname_aa;
-  fname_syn = default_fname_syn;
+  fname_aa = default_fullpath_aa;
+  fname_syn = default_fullpath_syn;
   
   if (argc != 1) {
     for (i = 1; i < argc; i++) {
@@ -155,7 +165,11 @@ int main(int argc, char **argv) {
   long long int stoppos;
   long long int start_region;
   long long int stop_region;
-  
+
+  ds = 0;
+  dn = 0;
+  pn = 0;
+  ps = 0;
   row1 = 0;
   factor1 = 0;
   ncodons = 0;
@@ -255,6 +269,8 @@ int main(int argc, char **argv) {
     printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%f\t%f\t%d\t%d\t%d\t%d\n", chr, start_region, stop_region, factor, ncodons, nvcodons, synonymous, nonsynonymous, ds, dn, ps, pn);
   }
   
+  free(default_fullpath_aa);
+  free(default_fullpath_syn);
   free(array);
   rwk_free_hash(&aaHash);
   rwk_free_hash(&synHash);

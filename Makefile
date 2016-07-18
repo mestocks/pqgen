@@ -9,6 +9,8 @@ HOME = $(shell echo $$HOME)/
 BASE = $(HOME).local/
 INSTALL = $(HOME).local/
 
+CONFIG = $(HOME).config/$(name)/
+
 Wgcc = -Wall -Wextra -Wpedantic
 
 ###
@@ -57,15 +59,17 @@ ilib = $(INSTALL)$(lib)
 iman = $(INSTALL)share/man/man1/
 iinc = $(INSTALL)$(inc)$(libname)/
 ishare = $(INSTALL)share/$(libname)/
+iconfig = $(CONFIG)
 
 IBIN = $(addprefix $(ibin),$(cmds))
 IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
 ILIB = $(addprefix $(INSTALL),$(libs))
 IMAN = $(addprefix $(iman),$(docs))
 ISHARE = $(addprefix $(ishare),$(info))
+ICONFIG = $(addprefix $(iconfig),$(info))
 
 .PHONY:	install
-install:	$(IBIN) $(IINC) $(ILIB) $(IMAN) $(ISHARE)
+install:	$(IBIN) $(IINC) $(ILIB) $(IMAN) $(ICONFIG)
 
 $(ibin)%:	$(bin)%
 	mkdir -p $(ibin)
@@ -87,8 +91,12 @@ $(ishare)%:	$(share)%
 	mkdir -p $(ishare)
 	cp $^ $@
 
+$(iconfig)%:	$(share)%
+	mkdir -p $(iconfig)
+	cp $^ $@
+
 ###
 
 .PHONY:	uninstall
 uninstall:
-	-rm $(IBIN) $(IINC) $(ILIB) $(IMAN) $(ISHARE)
+	-rm $(IBIN) $(IINC) $(ILIB) $(IMAN) $(ICONFIG)

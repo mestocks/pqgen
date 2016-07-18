@@ -40,7 +40,6 @@ int main(int argc, char **argv) {
   int start;
   int lwidth = 2048;
   const char delim = '\t';
-  char old_delim = '\t';
   char buffer[lwidth];
 
   char **array;
