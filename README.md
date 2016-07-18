@@ -4,7 +4,7 @@
 
 **pq-genetics** makes use of the library **librawk**. To install this dependency, go [here](https://github.com/mspopgen/librawk).
 
-Once **librawk** is install, download and unpack the latest version of **pq-genetics** (replacing *X*, *Y* and *Z* with the version number):
+Once **librawk** is installed, download and unpack the latest version of **pq-genetics** (replacing *X*, *Y* and *Z* with the version number):
 ```bash
 wget https://github.com/mspopgen/pq-genetics/archive/vX.Y.Z.tar.gz
 tar -zxvf vX.Y.Z.tar.gz
