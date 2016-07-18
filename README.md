@@ -86,7 +86,6 @@ chr    codon.start    codon.end    name    score    +|-    codon.REF    codon.1 
 
 Output:
 chr    codon.start    codon.end    name    score    +|-    ncodons    nvcodons    nsites.syn    nsites.nsyn    fix.syn    fix.nsyn    [poly.syn    poly.nsyn]
-```
 
 Example input:
 chr1      676151  676154  transcript1       0.65   +       ATG     ATG
