@@ -3,6 +3,37 @@
 
 #include "pq_genetics.h"
 
+unsigned int pq_alldna(const char *dna) {
+  const char *tmp;
+  unsigned int alldna;
+
+  tmp = dna;
+  alldna = 1;
+  while (*tmp && alldna == 1) {
+    switch (*tmp) {
+    case 'A': // do nothing;
+      break;
+    case 'T': // do nothing;
+      break;
+    case 'G': // do nothing;
+      break;
+    case 'C': // do nothing;
+      break;
+    case 'a': // do nothing;
+      break;
+    case 't': // do nothing;
+      break;
+    case 'g': // do nothing;
+      break;
+    case 'c': // do nothing;
+      break;
+    default: alldna = 0;
+    }
+    tmp++;
+  }
+  return alldna;
+}
+
 void pq_complement(char *codon) {
   int bp;
   for (bp = 0; bp < 3; bp++) {
@@ -15,6 +46,23 @@ void pq_complement(char *codon) {
     case 't': codon[bp] = 'a'; break;
     case 'g': codon[bp] = 'c'; break;
     case 'c': codon[bp] = 'g'; break;
+    default: codon[bp] = codon[bp];
+    }
+  }
+}
+
+void pq_dna_upper(char *codon) {
+  int bp;
+  for (bp = 0; bp < 3; bp++) {
+    switch (codon[bp]) {
+    case 'A': codon[bp] = 'A'; break;
+    case 'T': codon[bp] = 'T'; break;
+    case 'G': codon[bp] = 'G'; break;
+    case 'C': codon[bp] = 'C'; break;
+    case 'a': codon[bp] = 'A'; break;
+    case 't': codon[bp] = 'T'; break;
+    case 'g': codon[bp] = 'G'; break;
+    case 'c': codon[bp] = 'C'; break;
     default: codon[bp] = codon[bp];
     }
   }
