@@ -9,6 +9,8 @@ HOME = $(shell echo $$HOME)/
 BASE = $(HOME).local/
 INSTALL = $(HOME).local/
 
+Wgcc = -Wall -Wextra -Wpedantic
+
 ###
 
 bin = bin/
@@ -32,7 +34,7 @@ all:	$(bins) $(libs) $(objs)
 
 $(bin)%:	$(src)%.c $(libs)
 	mkdir -p $(bin)
-	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -L $(lib) -o $@ $(word 1,$^) -lrawk -lm -lpqgen
+	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -L $(lib) $(Wgcc) -o $@ $(word 1,$^) -lrawk -lm -lpqgen
 
 $(libs):	$(objs)
 	mkdir -p $(lib)
@@ -40,7 +42,7 @@ $(libs):	$(objs)
 
 $(obj)%.o:	$(src)%.c
 	mkdir -p $(obj)
-	gcc -I $(inc) -c -Wall -fpic -o $@ $^
+	gcc -I $(inc) -c $(Wgcc) -fpic -o $@ $^
 
 ###
 
