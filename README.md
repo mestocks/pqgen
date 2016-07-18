@@ -2,17 +2,18 @@
 
 ## Quick install
 
+First, download and unpack the latest version (*X*, *Y* and *Z* refer to version number):
 ```bash
 wget https://github.com/mspopgen/pq-genetics/archive/vX.Y.Z.tar.gz
-
 tar -zxvf vX.Y.Z.tar.gz
-
+```
+Then change into the pq-genetics directory, compile the source and install it:
+```bash
 cd pq-genetics-X.Y.Z
-
 make
-
 make install
 ```
+This will install the compiled code into ```~/.local/``` and put configuration files into ```~/.config/pqgen/```. To call the commands from any directory, add ```~/.local/bin``` to your ```PATH``` environmental variable and ```~/.local/lib``` to your ```LD_LIBRARY_PATH```.
 
 ##### pq-theta
 *Calculate site frequency based stats*
