@@ -1,5 +1,19 @@
 # Population and Quantitative Genetic Tools
 
+## Quick install
+
+```bash
+wget https://github.com/mspopgen/pq-genetics/archive/vX.Y.Z.tar.gz
+
+tar -zxvf vX.Y.Z.tar.gz
+
+cd pq-genetics-X.Y.Z
+
+make
+
+make install
+```
+
 ##### pq-theta
 *Calculate site frequency based stats*
 
