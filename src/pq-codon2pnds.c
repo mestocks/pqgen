@@ -251,7 +251,6 @@ int main(int argc, char **argv) {
       
       synonymous += syn_muts / 3.0;
       nonsynonymous += nsyn_muts / 3.0;
-      printf("%s %f %f %f %f\n", array[6], syn_muts, nsyn_muts, synonymous, nonsynonymous);
       diff_syn = 0;
       diff_nsyn = 0;
       for (i = 7; i < ncols; i++) {
