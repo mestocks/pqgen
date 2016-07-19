@@ -31,9 +31,14 @@
 #include <rwk_parse.h>
 #include <pq_sfstats.h>
 
+#define LCOL 1024
+#define LWIDTH 2048
+
 int main(int argc, char **argv) {
 
-  char help[] = "  ... | pqstats nsam [OPTIONS]";
+  char usage[] = "usage: pq-theta [--help] nsam [OPTIONS]\n";
+  char options[] = "Input:\nchr    start    end    name    nref    nalt\n\nOutput:\nchr    region.start    region.end    name    nsam    nsites    seg.sites    thetaW    thetaPi    tajD\n\nOPTIONS\n\n  -b <bool>\n    takes values 0 or 1, indicating whether theta values should be \n    give per base pair or summed over the entire region. [1]\n\n  -f <int>\n    column number (1-indexed) of the factor over which\n    the stats should be calculated. The default is to output \n    stats per chromosome, but the fourth name column could \n    be used instead to calculate over some group of features. [1]\n";
+  char help[] = "  ... | pq-theta nsam [OPTIONS]";
 
   int i;
   int nsam;
@@ -43,8 +48,10 @@ int main(int argc, char **argv) {
   // <cmd> <nsam>
   fcol = 0;
   perbp = 1;
-  if (argc == 1) {
-    printf("%s\n", help);
+  if (argc == 1 || strcmp(argv[1], "--help") == 0) {
+    printf("%s\n", usage);
+    printf("%s\n", options);
+    exit(0);
   } else {
     nsam = atoi(argv[1]);
     for (i = 2; i < argc; i++) {
@@ -57,16 +64,14 @@ int main(int argc, char **argv) {
   }
   
   int ncols = 6;
-  int lcols = 1024;
-  int lwidth = 2048;
-  char delim = '\t';
-  char buffer[lwidth];
+  char buffer[LWIDTH];
+  const char delim = '\t';
 
   char **array;
   array = calloc(ncols, sizeof (char*));
   
-  char chr[lcols];
-  char factor[lcols];
+  char chr[LCOL];
+  char factor[LCOL];
   long long int startpos, stoppos;
   long long int start_region, stop_region;
 
@@ -82,7 +87,7 @@ int main(int argc, char **argv) {
   
   int startindex = 0;
   while (fgets(buffer, sizeof(buffer), stdin)) {
-    rwkStrtoArray(array, buffer, &delim);
+    rwk_strsplit(array, buffer, &delim);
     
     startpos = atoll(array[1]);
     stoppos = atoll(array[2]);

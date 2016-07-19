@@ -34,15 +34,20 @@ void file2doublehash(char *fname, struct rwkHashTable *hash, int hsize) {
   fp = fopen(fname, "r");
   rwk_create_hash(hash, hsize);
   array = calloc(2, sizeof (char*));
+
+  char *ptr;
+  double *dptr;
   
   while (fgets(buffer, sizeof(buffer), fp)) {
     rwk_strsplit(array, buffer, &delim);
-    char *ptr = malloc(cwidth * sizeof (char));
+    ptr = malloc(cwidth * sizeof (char));
     strcpy(ptr, array[0]);
-    double *dptr = malloc(sizeof (double));
+    dptr = malloc(sizeof (double));
     *dptr = atof(array[1]);
     rwk_insert_hash(hash, ptr, dptr);
   }
+  free(array);
+  fclose(fp);
 }
 
 void file2charhash(char *fname, struct rwkHashTable *hash, int hsize) {
@@ -60,14 +65,20 @@ void file2charhash(char *fname, struct rwkHashTable *hash, int hsize) {
   fp = fopen(fname, "r");
   rwk_create_hash(hash, hsize);
   array = calloc(2, sizeof (char*));
+
+  char *ptr;
+  char *cptr;
+  
   while (fgets(buffer, sizeof(buffer), fp)) {
     rwk_strsplit(array, buffer, &delim);
-    char *ptr = malloc(cwidth * sizeof (char));
+    ptr = malloc(cwidth * sizeof (char));
     strcpy(ptr, array[0]);
-    char *cptr = malloc(cwidth * sizeof (char));
+    cptr = malloc(cwidth * sizeof (char));
     strcpy(cptr, array[1]);
     rwk_insert_hash(hash, ptr, cptr);
   }
+  free(array);
+  fclose(fp);
 }
 
 int main(int argc, char **argv) {
@@ -102,8 +113,15 @@ int main(int argc, char **argv) {
   fcol = default_fcol;
   fname_aa = default_fullpath_aa;
   fname_syn = default_fullpath_syn;
+
+  char usage[] = "usage: pq-codon2pnds [--help] [OPTIONS]\n";
+  char options[] = "OPTIONS\n\n  -a <STR>\n     space delimited file where each line gives a '<codon> <amino_acid>'\n     key-value pair determining which amino acid a codon translates to. ['~/.config/pqgen/codon2aa']\n\n  -f <int>\n     column number (1-indexed) of the factor over which \n     the stats should be calculated. The default is to output \n     stats per chromosome, but the fourth name column could \n    be used instead to calculate over some group of features. [1]\n\n  -s <STR>\n     space delimited file where each line gives a '<codon> <syn_sites>'\n     key-value pair determining how many possible synonymous mutations there are\n     for each codon. ['~/.config/pqgen/codon2syn']\n\nInput:\nchr    codon.start    codon.end    name    score    +|-    codon.REF    codon.1 ... codon.n\n\nOutput:\nchr    codon.start    codon.end    name    score    +|-    ncodons    nvcodons    nsites.syn    nsites.nsyn    fix.syn    fix.nsyn    [poly.syn    poly.nsyn]\n\nExample input:\nchr1      676151  676154  transcript1       0.65   +       ATG     ATG\nchr1      676154  676157  transcript1       0.65   +       TCG     TCG\nchr1      676157  676160  transcript1       0.65   +       ACG     ACA\n\nExample output:\nchr1      676151  676154  transcript1       0.65   +       3	3	4.333333	4.666667	1	0\n";
   
-  if (argc != 1) {
+  if (argc == 1 || strcmp(argv[1], "--help") == 0) {
+    printf("%s\n", usage);
+    printf("%s\n", options);
+    exit(0);
+  } else {
     for (i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-f") == 0) {
 	fcol = atoi(argv[i + 1]) - 1;
@@ -233,6 +251,7 @@ int main(int argc, char **argv) {
       
       synonymous += syn_muts / 3.0;
       nonsynonymous += nsyn_muts / 3.0;
+      printf("%s %f %f %f %f\n", array[6], syn_muts, nsyn_muts, synonymous, nonsynonymous);
       diff_syn = 0;
       diff_nsyn = 0;
       for (i = 7; i < ncols; i++) {
