@@ -117,11 +117,12 @@ int main(int argc, char **argv) {
   char usage[] = "usage: pq-codon2pnds [--help] [OPTIONS]\n";
   char options[] = "OPTIONS\n\n  -a <STR>\n     space delimited file where each line gives a '<codon> <amino_acid>'\n     key-value pair determining which amino acid a codon translates to. ['~/.config/pqgen/codon2aa']\n\n  -f <int>\n     column number (1-indexed) of the factor over which \n     the stats should be calculated. The default is to output \n     stats per chromosome, but the fourth name column could \n    be used instead to calculate over some group of features. [1]\n\n  -s <STR>\n     space delimited file where each line gives a '<codon> <syn_sites>'\n     key-value pair determining how many possible synonymous mutations there are\n     for each codon. ['~/.config/pqgen/codon2syn']\n\nInput:\nchr    codon.start    codon.end    name    score    +|-    codon.REF    codon.1 ... codon.n\n\nOutput:\nchr    codon.start    codon.end    name    score    +|-    ncodons    nvcodons    nsites.syn    nsites.nsyn    fix.syn    fix.nsyn    [poly.syn    poly.nsyn]\n\nExample input:\nchr1      676151  676154  transcript1       0.65   +       ATG     ATG\nchr1      676154  676157  transcript1       0.65   +       TCG     TCG\nchr1      676157  676160  transcript1       0.65   +       ACG     ACA\n\nExample output:\nchr1      676151  676154  transcript1       0.65   +       3	3	4.333333	4.666667	1	0\n";
   
-  if (argc == 1 || strcmp(argv[1], "--help") == 0) {
-    printf("%s\n", usage);
-    printf("%s\n", options);
-    exit(0);
-  } else {
+  //if (argc == 1 || strcmp(argv[1], "--help") == 0) {
+  //printf("%s\n", usage);
+  //printf("%s\n", options);
+  //exit(0);
+  //} else {
+  if (argc > 1) {
     for (i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-f") == 0) {
 	fcol = atoi(argv[i + 1]) - 1;

@@ -36,11 +36,11 @@ int main(int argc, char **argv) {
   char usage[] = "usage: pq-dna2codon [--help]\n";
   char options[] = "Input:\nchr    start    end    name    score    +|-    nuc.1    nuc.2 ... nuc.n\n\nOutput:\nchr    codon.start    codon.end    name    score    +|-    codon.1    codon.2 ... codon.n\n\nExample input:\nchr1      676151  676152  transcript1       0.65   +       A       A\nchr1      676152  676153  transcript1       0.65   +       T       T\nchr1      676153  676154  transcript1       0.65   +       G       G\nchr1      676154  676155  transcript1       0.65   +       T       T\nchr1      676155  676156  transcript1       0.65   +       C       C\nchr1      676156  676157  transcript1       0.65   +       G       G\nchr1      676157  676158  transcript1       0.65   +       A       A\nchr1      676158  676159  transcript1       0.65   +       C       C\nchr1      676159  676160  transcript1       0.65   +       G       A\n\nExample output:\nchr1      676151  676154  transcript1       0.65   +       ATG     ATG\nchr1      676154  676157  transcript1       0.65   +       TCG     TCG\nchr1      676157  676160  transcript1       0.65   +       ACG     ACA\n";
   
-  if (strcmp(argv[1], "--help") == 0) {
-    printf("%s\n", usage);
-    printf("%s\n", options);
-    exit(0);
-  }
+  //if (strcmp(argv[1], "--help") == 0) {
+  //  printf("%s\n", usage);
+  //  printf("%s\n", options);
+  //  exit(0);
+  //}
   
   int ismp;
   int irow;
