@@ -87,7 +87,7 @@ OPTIONS
 
   -a <STR>
      space delimited file where each line gives a "<codon> <amino_acid>"
-     key-value pair determining which amino acid a codon translates to. ["share/codon2aa"]
+     key-value pair determining which amino acid a codon translates to. ["~/.config/pqgen/codon2aa"]
   
   -f <int>
      column number (1-indexed) of the factor over which 
@@ -98,7 +98,7 @@ OPTIONS
   -s <STR>
      space delimited file where each line gives a "<codon> <syn_sites>"
      key-value pair determining how many possible synonymous mutations there are
-     for each codon. ["share/codon2syn"]
+     for each codon. ["~/.config/pqgen/codon2syn"]
 
 Input:
 chr    codon.start    codon.end    name    score    +|-    codon.REF    codon.1 ... codon.n
