@@ -32,7 +32,7 @@ objs = $(addsuffix .o,$(addprefix $(obj),$(headers)))
 ######
 
 .PHONY:	all
-all:	$(bins) $(libs) $(objs)
+all:	$(bins) $(libs) $(objs) $(man)pqgen.1
 
 $(bin)%:	$(src)%.c $(libs)
 	mkdir -p $(bin)
@@ -45,6 +45,12 @@ $(libs):	$(objs)
 $(obj)%.o:	$(src)%.c
 	mkdir -p $(obj)
 	gcc -I $(inc) -c $(Wgcc) -fpic -o $@ $^
+
+$(man)pqgen.1:	$(man)pqgen-TH $(man)pqgen-body
+	cat $^ > $@
+
+$(man)pqgen-TH:	$(bin)pqgen
+	$^ --version | cut -d' ' -f 1,3 | awk ' { print ".TH pq-genetics 1 \""strftime("%Y-%m-%d")"\" \""$$0"\" \"Population and Quantitative Genetic Tools\""} ' > $@
 
 ###
 

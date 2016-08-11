@@ -19,28 +19,32 @@ chr1      676157  676160  transcript1       0.65   +       ACG     ACA
 #include <rwk_htable.h>
 #include <pq_genetics.h>
 
+#define CWIDTH 2048
+#define LWIDTH 2048
+
+/* 
+   ATG M
+   ATG 2
+   
+   
+*/
+
 void file2doublehash(char *fname, struct rwkHashTable *hash, int hsize) {
 
   FILE *fp;
-  int lwidth;
-  int cwidth;
+  char *ptr;
+  double *dptr;
   char **array;
-  
-  lwidth = 128;
-  cwidth = 128;
-  char buffer[lwidth];
+  char buffer[LWIDTH];
   const char delim = ' ';
   
   fp = fopen(fname, "r");
   rwk_create_hash(hash, hsize);
   array = calloc(2, sizeof (char*));
-
-  char *ptr;
-  double *dptr;
   
   while (fgets(buffer, sizeof(buffer), fp)) {
     rwk_strsplit(array, buffer, &delim);
-    ptr = malloc(cwidth * sizeof (char));
+    ptr = malloc(CWIDTH * sizeof (char));
     strcpy(ptr, array[0]);
     dptr = malloc(sizeof (double));
     *dptr = atof(array[1]);
@@ -50,30 +54,31 @@ void file2doublehash(char *fname, struct rwkHashTable *hash, int hsize) {
   fclose(fp);
 }
 
+/*
+         ---> [ <char> <char> ... ]
+ *ptr 
+         ---> [ <double> ]
+
+ */
+
 void file2charhash(char *fname, struct rwkHashTable *hash, int hsize) {
 
   FILE *fp;
-  int lwidth;
-  int cwidth;
+  char *ptr;
+  char *cptr;
   char **array;
-
-  lwidth = 128;
-  cwidth = 128;
-  char buffer[lwidth];
+  char buffer[LWIDTH];
   const char delim = ' ';
   
   fp = fopen(fname, "r");
   rwk_create_hash(hash, hsize);
   array = calloc(2, sizeof (char*));
-
-  char *ptr;
-  char *cptr;
   
   while (fgets(buffer, sizeof(buffer), fp)) {
     rwk_strsplit(array, buffer, &delim);
-    ptr = malloc(cwidth * sizeof (char));
+    ptr = malloc(CWIDTH * sizeof (char));
     strcpy(ptr, array[0]);
-    cptr = malloc(cwidth * sizeof (char));
+    cptr = malloc(CWIDTH * sizeof (char));
     strcpy(cptr, array[1]);
     rwk_insert_hash(hash, ptr, cptr);
   }
@@ -151,17 +156,12 @@ int main(int argc, char **argv) {
 
   int nsam;
   int ncols;
-  int cwidth;
-  int lwidth;
   char **array;
   const char delim = '\t';
 
-  cwidth = 2048;
-  lwidth = 2048;
-
-  char chr[cwidth];
-  char factor[cwidth];
-  char buffer[lwidth];
+  char chr[CWIDTH];
+  char factor[CWIDTH];
+  char buffer[LWIDTH];
 
   void *aptr;
   void *ref_aa;
@@ -236,11 +236,10 @@ int main(int argc, char **argv) {
       stop_region = stoppos;
     }
 
-    unsigned int ok_codon;
-    unsigned int bad_codons = 0;
+    unsigned int bad_codons;
+    bad_codons = 0;
     for (i = 6; i < ncols; i++) {
-      ok_codon = pq_alldna(array[i]);
-      bad_codons += 1 - ok_codon;
+      bad_codons += 1 - pq_alldna(array[i]);
     }
     
     if (bad_codons == 0) {

@@ -11,21 +11,21 @@ unsigned int pq_alldna(const char *dna) {
   alldna = 1;
   while (*tmp && alldna == 1) {
     switch (*tmp) {
-    case 'A': // do nothing;
+    case 'A':
       break;
-    case 'T': // do nothing;
+    case 'T':
       break;
-    case 'G': // do nothing;
+    case 'G':
       break;
-    case 'C': // do nothing;
+    case 'C':
       break;
-    case 'a': // do nothing;
+    case 'a':
       break;
-    case 't': // do nothing;
+    case 't':
       break;
-    case 'g': // do nothing;
+    case 'g':
       break;
-    case 'c': // do nothing;
+    case 'c':
       break;
     default: alldna = 0;
     }
