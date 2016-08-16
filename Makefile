@@ -1,5 +1,5 @@
 name = pqgen
-cmds = pqgen pq-theta pq-codon2pnds pq-dna2codon
+cmds = pqgen pq-codon2pnds pq-dna2codon pq-theta
 docs = pqgen.1 pq-theta.1 pq-dna2codon.1
 headers = pq_genetics pq_sfobj pq_sfstats
 libname = lib$(name)
@@ -28,15 +28,16 @@ incs = $(addsuffix .h,$(addprefix $(inc),$(headers)))
 libs = $(lib)$(libname).so
 mans = $(addprefix $(man),$(docs))
 objs = $(addsuffix .o,$(addprefix $(obj),$(headers)))
+srcs = $(addprefix $(src),$(addsuffix .c,$(headers)))
 
 ######
 
 .PHONY:	all
-all:	$(bins) $(libs) $(objs) $(man)pqgen.1
+all:	$(bins) $(libs) $(man)pqgen.1
 
-$(bin)%:	$(src)%.c $(libs)
+$(bin)%:	$(src)%.c $(srcs)
 	mkdir -p $(bin)
-	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -L $(lib) $(Wgcc) -o $@ $(word 1,$^) -lrawk -lm -lpqgen
+	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ $(Wgcc) -o $@ $^ -lrawk -lm
 
 $(libs):	$(objs)
 	mkdir -p $(lib)
@@ -50,7 +51,7 @@ $(man)pqgen.1:	$(man)pqgen-TH $(man)pqgen-body
 	cat $^ > $@
 
 $(man)pqgen-TH:	$(bin)pqgen
-	$^ --version | cut -d' ' -f 1,3 | awk ' { print ".TH pq-genetics 1 \""strftime("%Y-%m-%d")"\" \""$$0"\" \"Population and Quantitative Genetic Tools\""} ' > $@
+	./$^ --version | cut -d' ' -f 1,3 | awk ' { print ".TH pq-genetics 1 \""strftime("%Y-%m-%d")"\" \""$$0"\" \"Population and Quantitative Genetic Tools\""} ' > $@
 
 ###
 

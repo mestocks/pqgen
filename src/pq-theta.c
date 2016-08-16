@@ -34,11 +34,10 @@
 #define LCOL 1024
 #define LWIDTH 2048
 
-int main(int argc, char **argv) {
-
+int main(int argc, char **argv)
+{
   char usage[] = "usage: pq-theta [--help] nsam [OPTIONS]\n";
   char options[] = "Input:\nchr    start    end    name    nref    nalt\n\nOutput:\nchr    region.start    region.end    name    nsam    nsites    seg.sites    thetaW    thetaPi    tajD\n\nOPTIONS\n\n  -b <bool>\n    takes values 0 or 1, indicating whether theta values should be \n    give per base pair or summed over the entire region. [1]\n\n  -f <int>\n    column number (1-indexed) of the factor over which\n    the stats should be calculated. The default is to output \n    stats per chromosome, but the fourth name column could \n    be used instead to calculate over some group of features. [1]\n";
-  char help[] = "  ... | pq-theta nsam [OPTIONS]";
 
   int i;
   int nsam;
@@ -87,8 +86,11 @@ int main(int argc, char **argv) {
   
   int startindex = 0;
   while (fgets(buffer, sizeof(buffer), stdin)) {
-    rwk_strsplit(array, buffer, &delim);
-    
+    if (rwk_str2array(array, buffer, ncols, &delim) == -1) {
+      free(array);
+      exit(1);
+    }
+    // if a row contains < ncols then the following causes a seg fault
     startpos = atoll(array[1]);
     stoppos = atoll(array[2]);
     nref = atoi(array[4]);

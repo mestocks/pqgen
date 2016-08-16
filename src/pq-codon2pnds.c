@@ -43,7 +43,12 @@ void file2doublehash(char *fname, struct rwkHashTable *hash, int hsize) {
   array = calloc(2, sizeof (char*));
   
   while (fgets(buffer, sizeof(buffer), fp)) {
-    rwk_strsplit(array, buffer, &delim);
+    if (rwk_str2array(array, buffer, 2, &delim) == -1) {
+      free(array);
+      rwk_free_hash(hash);
+      fclose(fp);
+      exit(1);
+    }
     ptr = malloc(CWIDTH * sizeof (char));
     strcpy(ptr, array[0]);
     dptr = malloc(sizeof (double));
@@ -75,7 +80,12 @@ void file2charhash(char *fname, struct rwkHashTable *hash, int hsize) {
   array = calloc(2, sizeof (char*));
   
   while (fgets(buffer, sizeof(buffer), fp)) {
-    rwk_strsplit(array, buffer, &delim);
+    if (rwk_str2array(array, buffer, 2, &delim) == -1) {
+      free(array);
+      rwk_free_hash(hash);
+      fclose(fp);
+      exit(1);
+    }
     ptr = malloc(CWIDTH * sizeof (char));
     strcpy(ptr, array[0]);
     cptr = malloc(CWIDTH * sizeof (char));
@@ -107,9 +117,12 @@ int main(int argc, char **argv) {
   
   home = getenv("HOME");
   
-  char *default_fullpath_aa = malloc(strlen(home) + 2 + strlen(default_fname_aa));
-  char *default_fullpath_syn = malloc(strlen(home) + 2 + strlen(default_fname_syn));
+  //char *default_fullpath_aa = malloc(strlen(home) + 2 + strlen(default_fname_aa));
+  //char *default_fullpath_syn = malloc(strlen(home) + 2 + strlen(default_fname_syn));
 
+  char default_fullpath_syn[1028];
+  char default_fullpath_aa[1028];
+  
   sprintf(default_fullpath_aa, "%s/%s", home, default_fname_aa);
   sprintf(default_fullpath_syn, "%s/%s", home, default_fname_syn);
   
@@ -122,12 +135,11 @@ int main(int argc, char **argv) {
   char usage[] = "usage: pq-codon2pnds [--help] [OPTIONS]\n";
   char options[] = "OPTIONS\n\n  -a <STR>\n     space delimited file where each line gives a '<codon> <amino_acid>'\n     key-value pair determining which amino acid a codon translates to. ['~/.config/pqgen/codon2aa']\n\n  -f <int>\n     column number (1-indexed) of the factor over which \n     the stats should be calculated. The default is to output \n     stats per chromosome, but the fourth name column could \n    be used instead to calculate over some group of features. [1]\n\n  -s <STR>\n     space delimited file where each line gives a '<codon> <syn_sites>'\n     key-value pair determining how many possible synonymous mutations there are\n     for each codon. ['~/.config/pqgen/codon2syn']\n\nInput:\nchr    codon.start    codon.end    name    score    +|-    codon.REF    codon.1 ... codon.n\n\nOutput:\nchr    codon.start    codon.end    name    score    +|-    ncodons    nvcodons    nsites.syn    nsites.nsyn    fix.syn    fix.nsyn    [poly.syn    poly.nsyn]\n\nExample input:\nchr1      676151  676154  transcript1       0.65   +       ATG     ATG\nchr1      676154  676157  transcript1       0.65   +       TCG     TCG\nchr1      676157  676160  transcript1       0.65   +       ACG     ACA\n\nExample output:\nchr1      676151  676154  transcript1       0.65   +       3	3	4.333333	4.666667	1	0\n";
   
-  //if (argc == 1 || strcmp(argv[1], "--help") == 0) {
-  //printf("%s\n", usage);
-  //printf("%s\n", options);
-  //exit(0);
-  //} else {
-  if (argc > 1) {
+  if (argc == 1 || strcmp(argv[1], "--help") == 0) {
+    printf("%s\n", usage);
+    printf("%s\n", options);
+    exit(0);
+  } else if (argc > 1) {
     for (i = 1; i < argc; i++) {
       if (strcmp(argv[i], "-f") == 0) {
 	fcol = atoi(argv[i + 1]) - 1;
@@ -148,9 +160,7 @@ int main(int argc, char **argv) {
   hsize = 128;
   file2charhash(fname_aa, &aaHash, hsize);
   file2doublehash(fname_syn, &synHash, hsize);
-
-  //
-
+  
   int row1;
   int factor1;
 
@@ -206,7 +216,12 @@ int main(int argc, char **argv) {
       array = calloc(ncols, sizeof (char*));
       row1 = 1;
     }
-    rwk_strsplit(array, buffer, &delim);
+    if (rwk_str2array(array, buffer, ncols, &delim) == -1) {
+      free(array);
+      rwk_free_hash(&aaHash);
+      rwk_free_hash(&synHash);
+      exit(1);
+    }
     startpos = atoll(array[1]);
     stoppos = atoll(array[2]);
     
@@ -287,8 +302,6 @@ int main(int argc, char **argv) {
     printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%f\t%f\t%d\t%d\t%d\t%d\n", chr, start_region, stop_region, factor, ncodons, nvcodons, synonymous, nonsynonymous, ds, dn, ps, pn);
   }
   
-  free(default_fullpath_aa);
-  free(default_fullpath_syn);
   free(array);
   rwk_free_hash(&aaHash);
   rwk_free_hash(&synHash);
