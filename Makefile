@@ -1,7 +1,7 @@
 name = pqgen
 cmds = pqgen pq-codon2pnds pq-div pq-dna2codon pq-theta
 docs = pqgen.1 pq-theta.1 pq-dna2codon.1
-headers = pq_genetics pq_sfobj pq_sfstats
+headers = pq_generics pq_genetics pq_sfobj pq_sfstats
 libname = lib$(name)
 info = codon2aa codon2syn
 
@@ -45,7 +45,7 @@ $(libs):	$(objs)
 
 $(obj)%.o:	$(src)%.c
 	mkdir -p $(obj)
-	gcc -I $(inc) -c $(Wgcc) -fpic -o $@ $^
+	gcc -I $(inc) -I $(BASE)include/librawk/ -L $(BASE)lib/ -c $(Wgcc) -fpic -o $@ $^ -lrawk
 
 $(man)pqgen.1:	$(man)pqgen-TH $(man)pqgen-body
 	cat $^ > $@

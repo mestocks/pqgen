@@ -2,35 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <rwk_args.h>
 #include <rwk_parse.h>
 #include <rwk_htable.h>
+#include <pq_generics.h>
 
 #define LCOL 1024
 #define LWIDTH 2048
 
-struct Data {
-  char *chr;
-  unsigned long long int *start;
-  unsigned long long int *end;
-  char *name;
-  unsigned long long int *nvsites;
-  char *value;
-};
-
-void print_bed(struct Data *data)
-{
-  printf("%s\t%llu\t%llu\t%s\t%llu\t%s\n", data->chr, *data->start, *data->end, data->name, *data->nvsites, data->value);
-}
-
 int main(int argc, char **argv)
 {
-  unsigned int CHR = 0;
-  unsigned int START = 1;
-  unsigned int END = 2;
-  unsigned int REF = 4;
-  unsigned int ALT = 5;
-  unsigned int FCOL = 0;
-
   char usage[] = "usage: pq-div [--help] [OPTIONS]\n";
   char options[] = "OPTIONS\n\n  -f <int>\n    column number (1-indexed) of the factor over which\n    the stats should be calculated. The default is to output \n    stats per chromosome, but the fourth name column could \n    be used instead to calculate over some group of features. [1]\n";
 
@@ -38,10 +19,27 @@ int main(int argc, char **argv)
     printf("%s\n", usage);
     printf("%s\n", options);
     exit(0);
-  } else if (argc > 1 && strcmp(argv[1], "-f") == 0) {
-    FCOL = atoi(argv[2]) - 1;
   }
+  
+  int nargs;
+  char **def_array;
+  unsigned int REF;
+  unsigned int ALT;
+  struct pq_parameters params;
+  char defaults[] = "-f 1 -c 1 -p 3 -k 5,6";
+  nargs = rwk_countcols(defaults, " ");
+  def_array = calloc(nargs, sizeof(char *));
+  rwk_str2array(def_array, defaults, nargs, " ");
 
+  pq_init_parameters(&params);
+  params.update(&params, nargs, def_array);
+  params.update(&params, argc-1, argv+1);
+
+  REF = params.KCOLS[0];
+  ALT = params.KCOLS[1];
+  free(def_array);
+
+  
   unsigned int i;
   int *pint;
   char *pchar;
@@ -58,12 +56,10 @@ int main(int argc, char **argv)
     rwk_insert_hash(&DnaHash, pchar, pint);
   }
   
-  int ncols = 6;
+  int ncols;
+  char **array;
   char buffer[LWIDTH];
   const char delim = '\t';
-  
-  char **array;
-  array = calloc(ncols, sizeof (char*));
   
   char chr[LCOL];
   char factor[LCOL];
@@ -82,27 +78,36 @@ int main(int argc, char **argv)
   unsigned long long int nvsites = 0;
   unsigned long long int diff = 0;
   unsigned int startindex = 0;
-  
+
+  int row1 = 0;
   while (fgets(buffer, sizeof(buffer), stdin)) {
+
+    if (row1 == 0) {
+      ncols = rwk_countcols(buffer, &delim);
+      array = calloc(ncols, sizeof (char*));
+      row1 = 1;
+    }
     
     if (rwk_str2array(array, buffer, ncols, &delim) == -1) {
       free(array);
       rwk_free_hash(&DnaHash);
+      rwk_free_hash(&DnaHash);
+      pq_free_parameters(&params);
       exit(1);
     }
     
     // seg fault if row contains < ncols columns
-    startpos = atoll(array[START]);
-    stoppos = atoll(array[END]);
+    stoppos = atoll(array[params.POS]);
+    startpos = stoppos - 1;
 
     if (startindex == 0) {
-      strcpy(chr, array[CHR]);
-      strcpy(factor, array[FCOL]);
+      strcpy(chr, array[params.CHROM]);
+      strcpy(factor, array[params.FCOL]);
       start_region = startpos;
       startindex = 1;
     }
 
-    if (strcmp(array[FCOL], factor) != 0) {
+    if (strcmp(array[params.FCOL], factor) != 0) {
       if (nvsites == 0) {
 	sprintf(value, "%s", missing);
       } else {
@@ -120,12 +125,12 @@ int main(int argc, char **argv)
       data.name = factor;
       data.nvsites = &nvsites;
       data.value = value;
-      print_bed(&data);
+      pq_print_bed(&data);
 
       diff = 0;
       dist = 0;
       nvsites = 0;
-      strcpy(factor, array[FCOL]);
+      strcpy(factor, array[params.FCOL]);
       start_region = startpos;
       stop_region = stoppos;
     }
@@ -137,7 +142,7 @@ int main(int argc, char **argv)
       }
       stop_region = stoppos;
     }
-    strcpy(chr, array[CHR]);
+    strcpy(chr, array[params.CHROM]);
   }
   
   if (nvsites == 0) {
@@ -157,10 +162,11 @@ int main(int argc, char **argv)
   data.name = factor;
   data.nvsites = &nvsites;
   data.value = value;
-  print_bed(&data);
+  pq_print_bed(&data);
   
   free(array);
   rwk_free_hash(&DnaHash);
+  pq_free_parameters(&params);
   
   return 0;
 }
