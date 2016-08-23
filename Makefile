@@ -57,7 +57,7 @@ $(man)pqgen-TH:	$(bin)pqgen
 
 .PHONY:	clean
 clean:
-	-rm $(objs) $(libs)
+	-rm $(bins) $(objs) $(libs)
 
 ######
 
