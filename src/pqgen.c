@@ -9,6 +9,9 @@
 #include <pq_parse.h>
 #include <pq_generics.h>
 
+#include <pq_div.h>
+#include <pq_theta.h>
+
 #include <pq_version.h>
 #include <rwk_version.h>
 
@@ -20,7 +23,7 @@ int main(int argc, char **argv)
 {
 
   char usage[] = "usage: pqgen [--version] [--help] <command> [<args>]\n";
-  char commands[] = "  theta         Calculate site frequency based stats\n  div     Divergence between two samples\n  codon2pnds    Counts synonymous and non-synonymous sites from codons\n";
+  char commands[] = "  theta         Calculate site frequency based stats\n  div           Divergence between two samples\n  codon2pnds    Counts synonymous and non-synonymous sites from codons\n";
   
   if (argc == 1) {
     printf("%s\n", usage);
@@ -83,8 +86,13 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin)) {
     if (row_index == 0) {
       ncols = rwk_countcols(buffer, &delim);
+
+      if (strcmp(argv[1], "theta") == 0) {
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
+      } else if (strcmp(argv[1], "div") == 0) {
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5,6");
+      }
       
-      sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
       nargs = rwk_countcols(defaults, " ");
       def_array = calloc(nargs, sizeof(char *));
       rwk_str2array(def_array, defaults, nargs, " ");
@@ -141,7 +149,8 @@ int main(int argc, char **argv)
   }
   printf("\n");
   wrap.clear(&wrap);
-  
+
+  pq_free_parameters(&params);
   pq_swfree(&wrap);
   free_row(&row);
   
