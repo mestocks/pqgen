@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "pq_genetics.h"
+#include <rwk_htable.h>
+#include <rwk_parse.h>
+#include <pq_genetics.h>
 
 unsigned int pq_alldna(const char *dna) {
   const char *tmp;
@@ -73,4 +76,68 @@ void pq_reverse(char *codon) {
   char three = codon[2];
   codon[0] = three;
   codon[2] = one;
+}
+
+
+struct rwkHashTable CODON_TO_NSYN;
+struct rwkHashTable CODON_TO_AMINO;
+
+void file2doubleHash(char *fname, int hsize) {
+
+  FILE *fp;
+  char *ptr;
+  double *dptr;
+  char **array;
+  char buffer[2048];
+  const char delim = ' ';
+  
+  fp = fopen(fname, "r");
+  rwk_create_hash(&CODON_TO_NSYN, hsize);
+  array = calloc(2, sizeof (char*));
+  
+  while (fgets(buffer, sizeof(buffer), fp)) {
+    if (rwk_str2array(array, buffer, 2, &delim) == -1) {
+      free(array);
+      rwk_free_hash(&CODON_TO_NSYN);
+      fclose(fp);
+      exit(1);
+    }
+    ptr = malloc(2048 * sizeof (char));
+    strcpy(ptr, array[0]);
+    dptr = malloc(sizeof (double));
+    *dptr = atof(array[1]);
+    rwk_insert_hash(&CODON_TO_NSYN, ptr, dptr);
+  }
+  free(array);
+  fclose(fp);
+}
+
+void file2charHash(char *fname, int hsize) {
+
+  FILE *fp;
+  char *ptr;
+  char *cptr;
+  char **array;
+  char buffer[2048];
+  const char delim = ' ';
+  
+  fp = fopen(fname, "r");
+  rwk_create_hash(&CODON_TO_AMINO, hsize);
+  array = calloc(2, sizeof (char*));
+  
+  while (fgets(buffer, sizeof(buffer), fp)) {
+    if (rwk_str2array(array, buffer, 2, &delim) == -1) {
+      free(array);
+      rwk_free_hash(&CODON_TO_AMINO);
+      fclose(fp);
+      exit(1);
+    }
+    ptr = malloc(2048 * sizeof (char));
+    strcpy(ptr, array[0]);
+    cptr = malloc(2048 * sizeof (char));
+    strcpy(cptr, array[1]);
+    rwk_insert_hash(&CODON_TO_AMINO, ptr, cptr);
+  }
+  free(array);
+  fclose(fp);
 }
