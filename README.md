@@ -1,6 +1,4 @@
 # Population and Quantitative Genetic Tools
--------------------------------------------
-
 
 **pq-genetics** calculates population and quantitative genetic statistics from streams of genomic data. The focus is on speed and ease of use, especially with regard to the input format.
 
@@ -12,14 +10,11 @@ Usage:
 
 Commands:
 
-  div
-    - Calculate divergence based statistics.
+  div          Calculate divergence based statistics.
 
-  pnds
-    - Count the number of silent and replacement substitutions and polymorphisms.
+  pnds         Count the number of silent and replacement substitutions and polymorphisms.
 
-  theta
-    - Calculate site frequency based statistics.
+  theta        Calculate site frequency based statistics.
     
 
 Common options:
