@@ -1,6 +1,8 @@
 #ifndef pq_generics_h__
 #define pq_generics_h__
 
+
+
 struct pq_parameters {
   unsigned int CHROM;
   unsigned int POS;
