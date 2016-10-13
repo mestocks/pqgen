@@ -5,11 +5,12 @@
 #include <rwk_htable.h>
 #include <pq_genetics.h>
 #include <pq_generics.h>
+#include <pq_args.h>
 // values = [nvcodons, nsyn, nnon, ds, dn, ps, pn]
 // outs   = [nsam, nvcodons, nsyn, nnon, ds, dn, ps, pn]
 
 
-void pq_swupdate_pnds(struct SWrap *wrap, char **array, struct pq_parameters *params)
+void pq_swupdate_pnds(struct SWrap *wrap, char **array)
 {
   int k;
   int diff_syn;
@@ -22,14 +23,14 @@ void pq_swupdate_pnds(struct SWrap *wrap, char **array, struct pq_parameters *pa
 
   unsigned int bad_codons;
   bad_codons = 0;
-  for (k = 0; k < params->nkargs; k++) {
-    bad_codons += 1 - pq_alldna(array[params->KCOLS[k]]);
+  for (k = 0; k < NKARGS; k++) {
+    bad_codons += 1 - pq_alldna(array[KCOLS[k]]);
   }
 
   if (bad_codons == 0) {
-    pq_dna_upper(array[params->KCOLS[0]]);
-    ref_aa = rwk_lookup_hash(&CODON_TO_AMINO, array[params->KCOLS[0]]);
-    ref_sptr = rwk_lookup_hash(&CODON_TO_NSYN, array[params->KCOLS[0]]);
+    pq_dna_upper(array[KCOLS[0]]);
+    ref_aa = rwk_lookup_hash(&CODON_TO_AMINO, array[KCOLS[0]]);
+    ref_sptr = rwk_lookup_hash(&CODON_TO_NSYN, array[KCOLS[0]]);
     syn_muts = *(double *)ref_sptr;
     nsyn_muts = 9.0 - syn_muts;
     
@@ -39,10 +40,10 @@ void pq_swupdate_pnds(struct SWrap *wrap, char **array, struct pq_parameters *pa
     
     diff_syn = 0;
     diff_nsyn = 0;
-    for (k = 1; k < params->nkargs; k++) {
-      pq_dna_upper(array[params->KCOLS[k]]);
-      aptr = rwk_lookup_hash(&CODON_TO_AMINO, array[params->KCOLS[k]]);
-      if (strcmp(array[params->KCOLS[0]], array[params->KCOLS[k]]) == 0) {
+    for (k = 1; k < NKARGS; k++) {
+      pq_dna_upper(array[KCOLS[k]]);
+      aptr = rwk_lookup_hash(&CODON_TO_AMINO, array[KCOLS[k]]);
+      if (strcmp(array[KCOLS[0]], array[KCOLS[k]]) == 0) {
 	
       } else {
 	if (strcmp(aptr, ref_aa) != 0) {
@@ -67,7 +68,7 @@ void pq_swupdate_pnds(struct SWrap *wrap, char **array, struct pq_parameters *pa
 }
 
 
-void pq_swwrite_pnds(struct SWrap *wrap, struct pq_parameters *params)
+void pq_swwrite_pnds(struct SWrap *wrap)
 {
   sprintf(wrap->outs[0], "%d", wrap->nsam);
   sprintf(wrap->outs[1], "%lli", *(long long int *)wrap->values[0]);

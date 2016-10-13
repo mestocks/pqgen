@@ -5,8 +5,9 @@
 #include <rwk_htable.h>
 #include <pq_generics.h>
 #include <pq_sfstats.h>
+#include <pq_args.h>
 
-void nref_nalt(void **counts, char **array, struct pq_parameters *params)
+void nref_nalt(void **counts, char **array)
 {
   int i;
   char *curr;
@@ -20,8 +21,8 @@ void nref_nalt(void **counts, char **array, struct pq_parameters *params)
   *(long long int *)counts[0] = 0;
   *(long long int *)counts[1] = 0;
   
-  for (i = 0; i < params->nkargs; i++) {
-    curr = array[params->KCOLS[i]];
+  for (i = 0; i < NKARGS; i++) {
+    curr = array[KCOLS[i]];
     if (strlen(curr) != 3 || curr[1] != '/') {
       *(long long int *)counts[0] = 0;
       *(long long int *)counts[1] = 0;
@@ -55,12 +56,12 @@ void nref_nalt(void **counts, char **array, struct pq_parameters *params)
   }
 }
 
-void pq_swupdate_theta(struct SWrap *wrap, char **array, struct pq_parameters *params)
+void pq_swupdate_theta(struct SWrap *wrap, char **array)
 {
   int s, nref, nalt, nminor;
   s = nref = nalt = nminor= 0;
 
-  nref_nalt(&wrap->values[3], array, params);
+  nref_nalt(&wrap->values[3], array);
   nref = *(long long int *)wrap->values[3];
   nalt = *(long long int *)wrap->values[4];
   
@@ -81,7 +82,7 @@ void pq_swupdate_theta(struct SWrap *wrap, char **array, struct pq_parameters *p
   }
 }
 
-void pq_swwrite_theta(struct SWrap *wrap, struct pq_parameters *params)
+void pq_swwrite_theta(struct SWrap *wrap)
 {
   long long int s, pisum, nvsites;
   double tw, combs, pi, tajd;

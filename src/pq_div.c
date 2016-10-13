@@ -4,15 +4,16 @@
 
 #include <rwk_htable.h>
 #include <pq_generics.h>
+#include <pq_args.h>
 
-void pq_swupdate_div(struct SWrap *wrap, char **array, struct pq_parameters *params)
+void pq_swupdate_div(struct SWrap *wrap, char **array)
 {
 
   char *ref;
   char *alt;
 
-  ref = array[params->KCOLS[0]];
-  alt = array[params->KCOLS[1]];
+  ref = array[KCOLS[0]];
+  alt = array[KCOLS[1]];
 
   if (strcmp(ref, ".") != 0 && strcmp(alt, ".") != 0) {
     if (strcmp(ref, alt) != 0) {
@@ -22,7 +23,7 @@ void pq_swupdate_div(struct SWrap *wrap, char **array, struct pq_parameters *par
   }
 }
 
-void pq_swwrite_div(struct SWrap *wrap, struct pq_parameters *params)
+void pq_swwrite_div(struct SWrap *wrap)
 {
   long long int diffs, nvsites;
   diffs =  *(long long int *)wrap->values[0];

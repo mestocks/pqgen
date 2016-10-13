@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <pq_args.h>
+
 #include <pq_genetics.h>
 
 #include <rwk_args.h>
@@ -26,7 +28,7 @@ int main(int argc, char **argv)
 {
   char usage[] = "usage: pqgen [--version] [--help] <command> [<args>]\n";
   char commands[] = "  theta         Calculate site frequency based stats\n  div           Divergence between two samples\n  codon2pnds    Counts synonymous and non-synonymous sites from codons\n";
-  
+
   if (argc == 1) {
     printf("%s\n", usage);
     printf("%s\n", commands);
@@ -122,10 +124,16 @@ int main(int argc, char **argv)
       params.update(&params, nargs, def_array);
       params.update(&params, argc-2, argv+2);
       free(def_array);
+      
+      CHROM = params.CHROM;
+      POS = params.POS;
+      FCOL = params.FCOL;
+      KCOLS = params.KCOLS;
+      NKARGS = params.nkargs;
 
-      init_row(&row, ncols, params.CHROM, params.POS, params.FCOL);
+      init_row(&row, ncols, CHROM, POS, FCOL);
 
-      nalleles = frm_multi * params.nkargs;
+      nalleles = frm_multi * NKARGS;
       swrap_init(&wrap, nalleles);
       
       row_index = 1;
@@ -144,7 +152,7 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(row.factor(&row), factor) != 0) {
-      wrap.write(&wrap, &params);
+      wrap.write(&wrap);
       printf("%s\t%llu\t%llu\t%s", chr, start_region, stop_region, factor);
       for (i = 0; i < wrap.nouts; i++) {
 	printf("\t%s", (char *)wrap.outs[i]);
@@ -157,13 +165,13 @@ int main(int argc, char **argv)
       stop_region = stoppos;   
     }
 
-    wrap.update(&wrap, row.array, &params);
+    wrap.update(&wrap, row.array);
     
     stop_region = stoppos;
     strcpy(chr, row.chrom(&row));
   }
 
-  wrap.write(&wrap, &params);
+  wrap.write(&wrap);
   printf("%s\t%llu\t%llu\t%s", chr, start_region, stop_region, factor);
   for (i = 0; i < wrap.nouts; i++) {
     printf("\t%s", (char *)wrap.outs[i]);

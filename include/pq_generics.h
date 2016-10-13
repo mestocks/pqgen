@@ -23,12 +23,13 @@ struct SWrap {
   int nvalues;
   char **outs;
   void **values;
-  void (*update)(struct SWrap *, char **, struct pq_parameters *);
-  void (*write)(struct SWrap *, struct pq_parameters *);
+  void (*update)(struct SWrap *, char **);
+  void (*write)(struct SWrap *);
   void (*clear)(struct SWrap *);
 };
 
 extern void pq_swfree(struct SWrap *wrap);
+
 
 struct Data {
   char *chr;
