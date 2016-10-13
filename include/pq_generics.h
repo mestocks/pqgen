@@ -2,21 +2,6 @@
 #define pq_generics_h__
 
 
-
-struct pq_parameters {
-  unsigned int CHROM;
-  unsigned int POS;
-  unsigned int FCOL;
-  int *KCOLS;
-  int nkargs;
-  struct rwkHashTable arghash;
-  void (*update)(struct pq_parameters *ptr, unsigned int argc, char **argv);
-};
-
-extern void pq_init_parameters(struct pq_parameters *params);
-extern void pq_free_parameters(struct pq_parameters *params);
-
-
 struct SWrap {
   int nsam;
   int nouts;

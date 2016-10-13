@@ -80,7 +80,6 @@ int main(int argc, char **argv)
   
   int nargs;
   char **def_array;
-  struct pq_parameters params;
   char defaults[128];
   
   int ncols;
@@ -109,9 +108,9 @@ int main(int argc, char **argv)
       ncols = rwk_countcols(buffer, &delim);
 
       if (strcmp(argv[1], "theta") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
       } else if (strcmp(argv[1], "div") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5,6");
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5,6 -b 1");
       } else if (strcmp(argv[1], "pnds") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 7-%d", ncols);
       }
@@ -120,16 +119,11 @@ int main(int argc, char **argv)
       def_array = calloc(nargs, sizeof(char *));
       rwk_str2array(def_array, defaults, nargs, " ");
       
-      pq_init_parameters(&params);
-      params.update(&params, nargs, def_array);
-      params.update(&params, argc-2, argv+2);
-      free(def_array);
+      pq_init_args();
+      pq_update_args(nargs, def_array);
+      pq_update_args(argc-2, argv+2);
       
-      CHROM = params.CHROM;
-      POS = params.POS;
-      FCOL = params.FCOL;
-      KCOLS = params.KCOLS;
-      NKARGS = params.nkargs;
+      free(def_array);
 
       init_row(&row, ncols, CHROM, POS, FCOL);
 
@@ -181,7 +175,7 @@ int main(int argc, char **argv)
 
   rwk_free_hash(&CODON_TO_NSYN);
   rwk_free_hash(&CODON_TO_AMINO);
-  pq_free_parameters(&params);
+  pq_free_args();
   pq_swfree(&wrap);
   free_row(&row);
   

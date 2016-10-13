@@ -96,8 +96,13 @@ void pq_swwrite_theta(struct SWrap *wrap)
   sprintf(wrap->outs[0], "%d", wrap->nsam);
   sprintf(wrap->outs[1], "%lli", nvsites);
   sprintf(wrap->outs[2], "%lli", s);
-  sprintf(wrap->outs[3], "%f", tw);
-  sprintf(wrap->outs[4], "%f", pi);
+  if (strcmp((char *)rwk_lookup_hash(&ARGHASH, "-b"), "0") == 0) {
+    sprintf(wrap->outs[3], "%f", tw);
+    sprintf(wrap->outs[4], "%f", pi);
+  } else {
+    sprintf(wrap->outs[3], "%f", tw / nvsites);
+    sprintf(wrap->outs[4], "%f", pi / nvsites);
+  }
   sprintf(wrap->outs[5], "%f", tajd);
 }
 

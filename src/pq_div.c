@@ -29,7 +29,11 @@ void pq_swwrite_div(struct SWrap *wrap)
   diffs =  *(long long int *)wrap->values[0];
   nvsites =  *(long long int *)wrap->values[1];
   sprintf(wrap->outs[0], "%lli", nvsites);
-  sprintf(wrap->outs[1], "%f", (double)diffs / (double)nvsites);
+  if (strcmp((char *)rwk_lookup_hash(&ARGHASH, "-b"), "0") == 0) {
+    sprintf(wrap->outs[1], "%f", (double)diffs);
+  } else {
+    sprintf(wrap->outs[1], "%f", (double)diffs / (double)nvsites);
+  }
 }
 
 void pq_swclear_div(struct SWrap *wrap)

@@ -6,5 +6,10 @@ extern int NKARGS;
 extern unsigned int CHROM;
 extern unsigned int POS;
 extern unsigned int FCOL;
+extern struct rwkHashTable ARGHASH;
+
+extern void pq_update_args(unsigned int argc, char **argv);
+extern void pq_init_args();
+extern void pq_free_args();
 
 #endif

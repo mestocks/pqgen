@@ -1,6 +1,6 @@
 name = pqgen
 cmds = pqgen pq-dna2codon
-docs = pqgen.1 pq-theta.1 pq-dna2codon.1
+docs = pqgen.1
 headers = pq_args pq_div pq_generics pq_genetics pq_pnds pq_sfstats pq_parse pq_theta
 libname = lib$(name)
 info = codon2aa codon2syn
