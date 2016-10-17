@@ -35,6 +35,16 @@ Common options:
      By default, statistics are output per chromosome.
      
 ```
+## Example
+
+```bash
+$ bcftools query -f "%CHROM\t%POS[\t%GT]\n" Contig012.vcf | pqgen theta -c 1 -p 2 -k 3-7
+
+Contig0	0	1372378	Contig0	10	1367408	15844	0.004096	0.004072	-0.029052
+Contig1	0	865787	Contig1	10	862828	12965	0.005312	0.005468	0.148427
+Contig2	0	786857	Contig2	10	783622	15404	0.006949	0.007175	0.163521
+```
+
 
 ## Quick install
 
