@@ -15,8 +15,10 @@
 #include <pq_generics.h>
 
 #include <pq_div.h>
-#include <pq_theta.h>
 #include <pq_pnds.h>
+#include <pq_sfs.h>
+#include <pq_theta.h>
+
 
 #include <pq_version.h>
 #include <rwk_version.h>
@@ -47,10 +49,13 @@ int main(int argc, char **argv)
   int frm_multi;
   struct SWrap wrap;
   void (*swrap_init)(struct SWrap *, int);
-  
+   
   if (strcmp(argv[1], "theta") == 0) {
     frm_multi = 2;
     swrap_init = pq_swinit_theta;
+  } else if (strcmp(argv[1], "sfs") == 0) {
+    frm_multi = 2;
+    swrap_init = pq_swinit_sfs;
   } else if (strcmp(argv[1], "div") == 0) {
     frm_multi = 1;
     swrap_init = pq_swinit_div;
@@ -109,6 +114,8 @@ int main(int argc, char **argv)
 
       if (strcmp(argv[1], "theta") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
+      } else if (strcmp(argv[1], "sfs") == 0) {
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
       } else if (strcmp(argv[1], "div") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5,6 -b 1");
       } else if (strcmp(argv[1], "pnds") == 0) {
