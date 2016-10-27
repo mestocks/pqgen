@@ -15,6 +15,7 @@
 #include <pq_generics.h>
 
 #include <pq_div.h>
+#include <pq_het.h>
 #include <pq_pnds.h>
 #include <pq_sfs.h>
 #include <pq_theta.h>
@@ -56,6 +57,9 @@ int main(int argc, char **argv)
   } else if (strcmp(argv[1], "sfs") == 0) {
     frm_multi = 2;
     swrap_init = pq_swinit_sfs;
+  } else if (strcmp(argv[1], "het") == 0) {
+    frm_multi = 1;
+    swrap_init = pq_swinit_het;
   } else if (strcmp(argv[1], "div") == 0) {
     frm_multi = 1;
     swrap_init = pq_swinit_div;
@@ -114,6 +118,8 @@ int main(int argc, char **argv)
 
       if (strcmp(argv[1], "theta") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
+      } else if (strcmp(argv[1], "het") == 0) {
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
       } else if (strcmp(argv[1], "sfs") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
       } else if (strcmp(argv[1], "div") == 0) {
