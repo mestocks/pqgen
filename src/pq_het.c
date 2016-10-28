@@ -4,12 +4,21 @@
 #include <pq_args.h>
 #include <pq_generics.h>
 
+/*
+
+  #/#    #/#    #/#    #/#
+
+ */
+
+
 void pq_swupdate_het(struct SWrap *wrap, char **array)
 {
   int i;
   int n;
   int nhet;
   char *curr;
+  char *a1;
+  char *a2;
   double het;
 
   n = 0;
@@ -17,11 +26,18 @@ void pq_swupdate_het(struct SWrap *wrap, char **array)
   nhet = 0;
   for (i = 0; i < NKARGS; i++) {
     curr = array[KCOLS[i]];
+    a1 = &curr[0];
     if (curr[0] != '.') {
-      if (curr[0] == '0' && curr[2] == '1') {
-	nhet++;
+      if (curr[1] == '/' && curr[3] == '\0') {
+	a2 = &curr[2];
+	if (*a1 != *a2) {
+	  nhet++;
+	}
+	n++;
+      } else {
+	// ignored
+	// indel. e.g. AAT/AAAAT, AAT/A or A/AAAAGC
       }
-      n++;
     }
   }
   het = (double)nhet / (double)n;
