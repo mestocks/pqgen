@@ -18,26 +18,67 @@
 #include <pq_sfs.h>
 #include <pq_theta.h>
 
-#include <pq_doc.h>
+#include <pq_help.h>
 #include <pq_version.h>
 #include <rwk_version.h>
 
 #define LCOL 1024
 #define LWIDTH 5120
 
+struct pq_command {
+  int frmt;
+  const char *name;
+  const char *desc;
+  void (*init)(struct SWrap *, int);
+};
+
+struct pq_command CMD[] =
+  {
+    {.name = PQ_DIV_NAME,
+     .desc = PQ_DIV_DESC,
+     .frmt = PQ_DIV_FRMT,
+     .init = PQ_DIV_INIT},
+    
+    {.name = PQ_HET_NAME,
+     .desc = PQ_HET_DESC,
+     .frmt = PQ_HET_FRMT,
+     .init = PQ_HET_INIT},
+    
+    {.name = PQ_PNDS_NAME,
+     .desc = PQ_PNDS_DESC,
+     .frmt = PQ_PNDS_FRMT,
+     .init = PQ_PNDS_INIT},
+    
+    {.name = PQ_SFS_NAME,
+     .desc = PQ_SFS_DESC,
+     .frmt = PQ_SFS_FRMT,
+     .init = PQ_SFS_INIT},
+    
+    {.name = PQ_THETA_NAME,
+     .desc = PQ_THETA_DESC,
+     .frmt = PQ_THETA_FRMT,
+     .init = PQ_THETA_INIT}
+  };
+
 void display_help()
 {
-  printf("usage: %s\n\n", PQ_USAGE);
-  printf("   %s        %s\n", PQ_DIV_NAME, PQ_DIV_DESC);
-  printf("   %s        %s\n", PQ_HET_NAME, PQ_HET_DESC);
-  printf("   %s       %s\n", PQ_PNDS_NAME, PQ_PNDS_DESC);
-  printf("   %s        %s\n", PQ_SFS_NAME, PQ_SFS_DESC);
-  printf("   %s      %s\n", PQ_THETA_NAME, PQ_THETA_DESC);
+  fprintf(stderr, "usage: %s\n\n", PQ_USAGE);
+
+  int i;
+  int ncmds;
+  int tsize;
+  tsize = 11;
+  ncmds = sizeof(CMD) / sizeof(CMD[0]);
+  for (i = 0; i < ncmds; i++) {
+    char gap[] = "           ";
+    gap[tsize - strlen(CMD[i].name)] = '\0';
+    fprintf(stderr, "   %s%s%s\n", CMD[i].name, gap, CMD[i].desc);
+  }
 }
 
 void display_version()
 {
-  printf("pqgen version %s (librawk version %s)\n", PQ_VERSION, RWK_VERSION);
+  fprintf(stderr, "pqgen version %s (librawk version %s)\n", PQ_VERSION, RWK_VERSION);
 }
 
 int main(int argc, char **argv)
@@ -46,38 +87,40 @@ int main(int argc, char **argv)
     display_help();
     exit(0);
   }
+
   if (argc > 1 && strcmp(argv[1], "--help") == 0) {
     display_help();
     exit(0);
   }
+
   if (argc > 1 && strcmp(argv[1], "--version") == 0) {
     display_version();
     exit(0);
   }
-  
+
+  int i;
+  int ncmds;
   int frm_multi;
   struct SWrap wrap;
   void (*swrap_init)(struct SWrap *, int);
+  
+  i = 0;
+  ncmds = sizeof(CMD) / sizeof(CMD[0]);
+  while (i < ncmds) {
+    if (strcmp(argv[1], CMD[i].name) == 0) {
+      frm_multi = CMD[i].frmt;
+      swrap_init = CMD[i].init;
+      break;
+    }
+    i++;
+  }
+  
+  if (i == ncmds) {
+    fprintf(stderr, "pqgen: '%s' is not a command. See 'pqgen --help'.\n", argv[1]);
+    exit(0);
+  }
 
-  /*
-    swrap_init function;
-    frm_multi (ploidy);
-    
-   */
-   
-  if (strcmp(argv[1], "theta") == 0) {
-    frm_multi = 2;
-    swrap_init = pq_swinit_theta;
-  } else if (strcmp(argv[1], "sfs") == 0) {
-    frm_multi = 2;
-    swrap_init = pq_swinit_sfs;
-  } else if (strcmp(argv[1], "het") == 0) {
-    frm_multi = 1;
-    swrap_init = pq_swinit_het;
-  } else if (strcmp(argv[1], "div") == 0) {
-    frm_multi = 1;
-    swrap_init = pq_swinit_div;
-  } else if (strcmp(argv[1], "pnds") == 0) {
+  if (strcmp(argv[1], "pnds") == 0) {
     char *home;
     char *fname_aa;
     char *fname_syn;
@@ -92,11 +135,6 @@ int main(int argc, char **argv)
     fname_syn = default_fullpath_syn;
     file2charHash(fname_aa, 128);
     file2doubleHash(fname_syn, 128);
-    frm_multi = 1;
-    swrap_init = pq_swinit_pnds;
-  } else {
-    printf("pqgen: '%s' is not a command. See 'pqgen --help'.\n", argv[1]);
-    exit(0);
   }
   
   int nargs;
@@ -115,7 +153,6 @@ int main(int argc, char **argv)
   unsigned long long int start_region;
   unsigned long long int stop_region;
 
-  int i;
   int row_index;
   int startindex;
 
@@ -131,7 +168,7 @@ int main(int argc, char **argv)
       if (strcmp(argv[1], "theta") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
       } else if (strcmp(argv[1], "het") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
+	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
       } else if (strcmp(argv[1], "sfs") == 0) {
 	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
       } else if (strcmp(argv[1], "div") == 0) {

@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include <rwk_htable.h>
 
 #include <pq_args.h>
 #include <pq_generics.h>
@@ -52,7 +55,12 @@ void pq_swwrite_het(struct SWrap *wrap)
   double het;
   sprintf(wrap->outs[0], "%d", wrap->nsam);
   sprintf(wrap->outs[1], "%lli", *(long long int *)wrap->values[0]);
-  het = *(double *)wrap->values[1] / *(long long int *)wrap->values[0];
+
+  if (strcmp((char *)rwk_lookup_hash(&ARGHASH, "-b"), "0") == 0) {
+    het = *(double *)wrap->values[1];
+  } else {
+    het = *(double *)wrap->values[1] / *(long long int *)wrap->values[0];
+  }
   sprintf(wrap->outs[2], "%f", het);
 }
 
@@ -65,7 +73,7 @@ void pq_swclear_het(struct SWrap *wrap)
 // nvalues = [nvsites, het]
 // nouts   = [nsam, nvsites, uhet]
 
-void pq_swinit_het(struct SWrap *wrap, int nsam)
+void PQ_HET_INIT(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;

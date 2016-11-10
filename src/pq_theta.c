@@ -116,7 +116,7 @@ void pq_swclear_theta(struct SWrap *wrap)
 
 // nvalues = [nvsites, s, pisum, nref, nalt]
 
-void pq_swinit_theta(struct SWrap *wrap, int nsam)
+void PQ_THETA_INIT(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;

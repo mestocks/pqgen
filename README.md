@@ -12,7 +12,11 @@ Commands:
 
   div          Calculate divergence based statistics.
 
+  het	       Calculate heterozygosity.
+
   pnds         Count the number of silent and replacement substitutions and polymorphisms.
+
+  sfs	       Output the folded site frequency spectrum.
 
   theta        Calculate site frequency based statistics.
     
@@ -38,7 +42,7 @@ Common options:
 ## Example
 
 ```bash
-$ bcftools query -f "%CHROM\t%POS[\t%GT]\n" Contig012.vcf | pqgen theta -c 1 -p 2 -k 3-7
+$ bcftools query -f "%CHROM\t<pos0>\t%POS\t<name>[\t%GT]\n" Contig012.vcf | pqgen theta
 
 Contig0	0	1372378	Contig0	10	1367408	15844	0.004096	0.004072	-0.029052
 Contig1	0	865787	Contig1	10	862828	12965	0.005312	0.005468	0.148427
