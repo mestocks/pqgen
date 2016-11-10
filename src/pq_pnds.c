@@ -90,7 +90,7 @@ void pq_swclear_pnds(struct SWrap *wrap)
 }
 
 
-void pq_swinit_pnds(struct SWrap *wrap, int nsam)
+void PQ_PNDS_INIT(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam - 1;

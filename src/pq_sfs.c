@@ -47,7 +47,7 @@ void pq_swclear_sfs(struct SWrap *wrap)
 // nouts   = [nsam, nvsites, sfs1, sfs2, ...]
 // sfs: number of occurances [0, 1, ..., n + 1]
 
-void pq_swinit_sfs(struct SWrap *wrap, int nsam)
+void PQ_SFS_INIT(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;

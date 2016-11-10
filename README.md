@@ -12,7 +12,11 @@ Commands:
 
   div          Calculate divergence based statistics.
 
+  het	       Calculate heterozygosity.
+
   pnds         Count the number of silent and replacement substitutions and polymorphisms.
+
+  sfs	       Output the folded site frequency spectrum.
 
   theta        Calculate site frequency based statistics.
     

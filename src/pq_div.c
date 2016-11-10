@@ -44,7 +44,7 @@ void pq_swclear_div(struct SWrap *wrap)
   }
 }
 
-void pq_swinit_div(struct SWrap *wrap, int nsam)
+void PQ_DIV_INIT(struct SWrap *wrap, int nsam)
 {
   // nvsites, diffs
   int i;
