@@ -1,10 +1,8 @@
 #include <stdio.h>
-
 #include <stdlib.h>
 #include <string.h>
 
 #include <pq_args.h>
-
 #include <pq_genetics.h>
 
 #include <rwk_args.h>
@@ -20,36 +18,52 @@
 #include <pq_sfs.h>
 #include <pq_theta.h>
 
-
+#include <pq_doc.h>
 #include <pq_version.h>
 #include <rwk_version.h>
 
 #define LCOL 1024
 #define LWIDTH 5120
 
+void display_help()
+{
+  printf("usage: %s\n\n", PQ_USAGE);
+  printf("   %s        %s\n", PQ_DIV_NAME, PQ_DIV_DESC);
+  printf("   %s        %s\n", PQ_HET_NAME, PQ_HET_DESC);
+  printf("   %s       %s\n", PQ_PNDS_NAME, PQ_PNDS_DESC);
+  printf("   %s        %s\n", PQ_SFS_NAME, PQ_SFS_DESC);
+  printf("   %s      %s\n", PQ_THETA_NAME, PQ_THETA_DESC);
+}
+
+void display_version()
+{
+  printf("pqgen version %s (librawk version %s)\n", PQ_VERSION, RWK_VERSION);
+}
+
 int main(int argc, char **argv)
 {
-  char usage[] = "usage: pqgen [--version] [--help] <command> [<args>]\n";
-  char commands[] = "  theta         Calculate site frequency based stats\n  div           Divergence between two samples\n  codon2pnds    Counts synonymous and non-synonymous sites from codons\n";
-
   if (argc == 1) {
-    printf("%s\n", usage);
-    printf("%s\n", commands);
+    display_help();
     exit(0);
   }
   if (argc > 1 && strcmp(argv[1], "--help") == 0) {
-    printf("%s\n", usage);
-    printf("%s\n", commands);
+    display_help();
     exit(0);
   }
   if (argc > 1 && strcmp(argv[1], "--version") == 0) {
-    printf("pq-genetics version %s (linked to librawk version %s)\n", PQ_VERSION, RWK_VERSION);
+    display_version();
     exit(0);
   }
   
   int frm_multi;
   struct SWrap wrap;
   void (*swrap_init)(struct SWrap *, int);
+
+  /*
+    swrap_init function;
+    frm_multi (ploidy);
+    
+   */
    
   if (strcmp(argv[1], "theta") == 0) {
     frm_multi = 2;
@@ -81,9 +95,7 @@ int main(int argc, char **argv)
     frm_multi = 1;
     swrap_init = pq_swinit_pnds;
   } else {
-    printf("Command '%s' not recognised.\n", argv[1]);
-    printf("%s\n", usage);
-    printf("%s\n", commands);
+    printf("pqgen: '%s' is not a command. See 'pqgen --help'.\n", argv[1]);
     exit(0);
   }
   
@@ -111,7 +123,7 @@ int main(int argc, char **argv)
   startindex = 0;
   
   struct GenericRow row;
-
+  
   while (fgets(buffer, sizeof(buffer), stdin)) {
     if (row_index == 0) {
       ncols = rwk_countcols(buffer, &delim);
