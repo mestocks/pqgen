@@ -1,1 +1,1 @@
-#define PQ_VERSION "0.1.9"
+#define PQ_VERSION "0.2"
