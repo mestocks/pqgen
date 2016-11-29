@@ -2,28 +2,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_args.h>
-#include <pq_genetics.h>
-
 #include <rwk_args.h>
 #include <rwk_parse.h>
 #include <rwk_htable.h>
 
+#include <pq_args.h>
 #include <pq_parse.h>
+#include <pq_limits.h>
 #include <pq_generics.h>
+#include <pq_genetics.h>
 
 #include <pq_div.h>
 #include <pq_het.h>
-#include <pq_pnds.h>
 #include <pq_sfs.h>
+#include <pq_pnds.h>
 #include <pq_theta.h>
 
 #include <pq_help.h>
 #include <pq_version.h>
-#include <rwk_version.h>
-
-#define LCOL 1024
-#define LWIDTH 5120
 
 struct pq_command {
   int frmt;
@@ -76,11 +72,6 @@ void display_help()
   }
 }
 
-void display_version()
-{
-  fprintf(stderr, "pqgen version %s (librawk version %s)\n", PQ_VERSION, RWK_VERSION);
-}
-
 int main(int argc, char **argv)
 {
   if (argc == 1) {
@@ -94,14 +85,14 @@ int main(int argc, char **argv)
   }
 
   if (argc > 1 && strcmp(argv[1], "--version") == 0) {
-    display_version();
+    pq_display_version();
     exit(0);
   }
 
   int i;
   int ncmds;
   int frm_multi;
-  struct SWrap wrap;
+  struct SWrap Stat;
   void (*swrap_init)(struct SWrap *, int);
   
   i = 0;
@@ -143,11 +134,11 @@ int main(int argc, char **argv)
   
   int ncols;
   int nalleles;
-  char buffer[LWIDTH];
+  char buffer[PQ_LWIDTH];
   const char delim = '\t';
 
-  char chr[LCOL];
-  char factor[LCOL];
+  char chr[PQ_LCOL];
+  char factor[PQ_LCOL];
   unsigned long long int startpos;
   unsigned long long int stoppos;
   unsigned long long int start_region;
@@ -190,7 +181,7 @@ int main(int argc, char **argv)
       init_row(&row, ncols, CHROM, POS, FCOL);
 
       nalleles = frm_multi * NKARGS;
-      swrap_init(&wrap, nalleles);
+      swrap_init(&Stat, nalleles);
       
       row_index = 1;
     }
@@ -208,37 +199,37 @@ int main(int argc, char **argv)
     }
 
     if (strcmp(row.factor(&row), factor) != 0) {
-      wrap.write(&wrap);
+      Stat.write(&Stat);
       printf("%s\t%llu\t%llu\t%s", chr, start_region, stop_region, factor);
-      for (i = 0; i < wrap.nouts; i++) {
-	printf("\t%s", (char *)wrap.outs[i]);
+      for (i = 0; i < Stat.nouts; i++) {
+	printf("\t%s", (char *)Stat.outs[i]);
       }  
       printf("\n");
-      wrap.clear(&wrap);      
+      Stat.clear(&Stat);      
       
       strcpy(factor, row.factor(&row));
       start_region = startpos;
       stop_region = stoppos;   
     }
 
-    wrap.update(&wrap, row.array);
+    Stat.update(&Stat, row.array);
     
     stop_region = stoppos;
     strcpy(chr, row.chrom(&row));
   }
 
-  wrap.write(&wrap);
+  Stat.write(&Stat);
   printf("%s\t%llu\t%llu\t%s", chr, start_region, stop_region, factor);
-  for (i = 0; i < wrap.nouts; i++) {
-    printf("\t%s", (char *)wrap.outs[i]);
+  for (i = 0; i < Stat.nouts; i++) {
+    printf("\t%s", (char *)Stat.outs[i]);
   }
   printf("\n");
-  wrap.clear(&wrap);
+  Stat.clear(&Stat);
 
   rwk_free_hash(&CODON_TO_NSYN);
   rwk_free_hash(&CODON_TO_AMINO);
   pq_free_args();
-  pq_swfree(&wrap);
+  pq_swfree(&Stat);
   free_row(&row);
   
   return 0;

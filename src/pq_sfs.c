@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 #include <pq_args.h>
-#include <pq_theta.h>
 #include <pq_generics.h>
+#include <pq_theta.h>
 
 
 void pq_swupdate_sfs(struct SWrap *wrap, char **array)
