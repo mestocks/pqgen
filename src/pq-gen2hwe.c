@@ -61,7 +61,6 @@ double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
   
   for (int i=0; i <= rare_copies; i++) {
     het_probs[i] /= sum;
-    printf("%d %f\n", i, het_probs[i]);
   }
   
   double p_hwe = 0.0;
@@ -75,7 +74,7 @@ double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
   return (p_hwe > 1.0) ? 1.0 : p_hwe;
 }
 
-int main(int argc, char **argv)
+int old_main(int argc, char **argv)
 {
   int ohets;
   int ohom1;
@@ -95,7 +94,7 @@ int main(int argc, char **argv)
 
 #define LWIDTH 5120
 
-int old_main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   int ohets;
   int ohom1;
