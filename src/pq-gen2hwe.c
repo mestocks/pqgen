@@ -6,9 +6,11 @@
 #define COLOR "\x1B[33m"
 #define NORMAL "\x1B[0m"
 
-double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
-			    //	double *het_probs)
+double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2, int ctype)
 {
+  int i;
+  double p_hwe;
+  
   int obs_homc = (obs_hom1 < obs_hom2) ? obs_hom2 : obs_hom1;
   int obs_homr = (obs_hom1 < obs_hom2) ? obs_hom1 : obs_hom2;
   
@@ -17,14 +19,12 @@ double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
   
   double *het_probs = malloc((rare_copies + 1) * sizeof(double));
   
-  // start at midpoint
   int mid = rare_copies * (2 * genotypes - rare_copies) / (2 * genotypes);
   
-  // check to ensure that midpoint and rare alleles have same parity
   if ((rare_copies & 1) ^ (mid & 1)) {
     mid ++;
   }
-
+  
   int curr_hets = mid;
   int curr_homr = (rare_copies - mid) / 2;
   int curr_homc = genotypes - curr_hets - curr_homr;
@@ -33,6 +33,7 @@ double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
   double sum = het_probs[mid];
   
   for (curr_hets = mid; curr_hets > 1; curr_hets -= 2) {
+
     het_probs[curr_hets - 2] = het_probs[curr_hets] * curr_hets *
       (curr_hets - 1.0) / (4.0 * (curr_homr + 1.0) * (curr_homc + 1.0));
     sum += het_probs[curr_hets - 2];
@@ -43,11 +44,11 @@ double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
     curr_homc++;
   }
   
-  
   curr_hets = mid;
   curr_homr = (rare_copies - mid) / 2;
   curr_homc = genotypes - curr_hets - curr_homr;
   for (curr_hets = mid; curr_hets <= rare_copies - 2; curr_hets += 2) {
+    
     het_probs[curr_hets + 2] = het_probs[curr_hets] * 4.0 * curr_homr *
       curr_homc / ((curr_hets + 2.0) * (curr_hets + 1.0));
     sum += het_probs[curr_hets + 2];
@@ -58,18 +59,27 @@ double SNPHWE_pValue(int obs_hets, int obs_hom1, int obs_hom2)
     curr_homc--;
   }
   
-  
-  for (int i=0; i <= rare_copies; i++) {
+  for (i = 0; i <= rare_copies; i++) {
     het_probs[i] /= sum;
   }
   
-  double p_hwe = 0.0;
-  // p-value calculation for p_hwe
-  for (int i=0; i <= rare_copies; i++) {
-    if (het_probs[i] > het_probs[obs_hets])
-      continue;
-    p_hwe += het_probs[i];
+  p_hwe = 0.0;
+  
+  if (ctype == 1) {
+    
+    for (i = 0; i <= rare_copies; i++) {
+      if (het_probs[i] > het_probs[obs_hets])
+	continue;
+      p_hwe += het_probs[i];
+    }
+    
+  } else if (ctype == 2) {
+
+    for (i = obs_hets; i <= rare_copies; i++) {
+      p_hwe += het_probs[i];
+    }
   }
+  free(het_probs);
   
   return (p_hwe > 1.0) ? 1.0 : p_hwe;
 }
@@ -82,10 +92,12 @@ int old_main(int argc, char **argv)
   double pval;
 
   // 1st and 4th columns from Table 1 in Wigginton et al., 2005
-  for (ohets = 21; ohets <= 21; ohets += 2) {
+  for (ohets = 5; ohets <= 21; ohets += 2) {
+    
     ohom1 = (21 - ohets) / 2;
     ohom2 = 100 - (ohets + ohom1);
-    pval = SNPHWE_pValue(ohets, ohom1, ohom2);
+    
+    pval = SNPHWE_pValue(ohets, ohom1, ohom2, 1);
     printf("%d\t%f\n", ohets, pval);
   }
   
@@ -96,11 +108,21 @@ int old_main(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+  // usage: pq-gen2hwe <ctype>
+  // ctype - 1 for two-sided, 2 for greater than
+
+  int ctype;
+
+  ctype = 1;
+  if (argc > 1) {
+    ctype = atoi(argv[1]);
+  }
+  
   int ohets;
   int ohom1;
   int ohom2;
   double pval;
-
+  
   int i;
   int ncols;
   char **array;
@@ -125,7 +147,7 @@ int main(int argc, char **argv)
     ohom1 = atoi(array[4]);
     ohets = atoi(array[5]);
     ohom2 = atoi(array[6]);
-    pval = SNPHWE_pValue(ohets, ohom1, ohom2);
+    pval = SNPHWE_pValue(ohets, ohom1, ohom2, ctype);
     
     printf("%s", array[0]);
     for (i = 1; i < 7; i++) {
