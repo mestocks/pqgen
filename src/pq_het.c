@@ -8,11 +8,20 @@
 #include <pq_generics.h>
 
 /*
+  #/#  #/#  #/#  #/#
 
-  #/#    #/#    #/#    #/#
+  .genotypes
+  [ value
+  [ count
+  [ next
+  
+*/
 
- */
-
+struct genotype_counts {
+  char *value;
+  int count;
+  struct genotype_counts *next;
+};
 
 void pq_swupdate_het(struct SWrap *wrap, char **array)
 {
