@@ -5,7 +5,6 @@
 #define PQ_THETA_NAME "theta"
 #define PQ_THETA_DESC "Calculate site frequency based statistics"
 
-extern void nref_nalt(void **counts, char **array);
-extern void PQ_THETA_INIT(struct SWrap *wrap, int nsam);
+extern void pq_theta_init(struct SWrap *wrap, int nsam);
 
 #endif

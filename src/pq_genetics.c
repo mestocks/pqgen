@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_htable.h>
 #include <rwk_parse.h>
+#include <rwk_htable.h>
+
+#include <pq_args.h>
 #include <pq_genetics.h>
 
 unsigned int pq_alldna(const char *dna) {
@@ -77,6 +79,96 @@ void pq_reverse(char *codon) {
   codon[0] = three;
   codon[2] = one;
 }
+
+
+// ~/~ ~/~
+// ~|~ ~|~
+
+// nhets
+
+//    0 1 2
+// 0 [     ]
+// 1 [     ]
+// 2 [     ]
+
+// [00, 01, 02, 10, 11, 12, 20, 21, 22]
+// [ 0,  1,  2,  3,  4,  5,  6,  7,  8]
+
+// [x, y] -> (x * n) + y
+
+void pq_gtstat(void **info, char **array)
+{
+  int i;
+  int j;
+  int a1;
+  int a2;
+  int nhet;
+  int nref;
+  int nalt;
+  int nperm;
+  char *curr;
+  int *genos;
+  int cgenos;
+  int ngenos;
+  int *alleles;
+  int maxgenos;
+
+  /* 
+   * When maxgenos = 10 the assumption is therefore that
+   * there are no alleles > 9 (i.e. length(~/~) == 3 &&
+   * ~ can be treated as a single char).
+   */
+
+  maxgenos = 10;
+  nperm = maxgenos * maxgenos;
+  genos = calloc(nperm, sizeof(int));
+  alleles = calloc(maxgenos, sizeof(int));
+
+  /*
+   * Add genotypes to array. 
+   *
+   * The c standard requires that 
+   * the character set for digits is in numerical order so 
+   * their numerical value can be obtained simply by subtracting 
+   * '0'.
+  */
+  
+  ngenos = 0;
+  for (i = 0; i < NKARGS; i++) {
+    curr = array[KCOLS[i]];
+    if (curr[0] != '.') {
+      a1 = curr[0] - '0';
+      a2 = curr[2] - '0';
+      genos[(a1 * maxgenos) + a2]++;
+      alleles[a1]++;
+      alleles[a2]++;
+      ngenos++;
+    }
+  }
+  
+  nhet = 0;
+  cgenos = 0;
+
+  for (i = 0; i < maxgenos && cgenos != ngenos; i++) {
+    for (j = 0; j < maxgenos && cgenos != ngenos; j++) {
+      cgenos += genos[(i * maxgenos) + j];
+      if (i != j) {
+	nhet += genos[(i * maxgenos) + j];
+      }
+    }
+  }
+
+  nref = alleles[0];
+  nalt = (2 * ngenos) - nref;
+
+  *(int *)info[0] = nhet;
+  *(int *)info[1] = nref;
+  *(int *)info[2] = nalt;
+
+  free(alleles);
+  free(genos);
+}
+
 
 
 struct rwkHashTable CODON_TO_NSYN;

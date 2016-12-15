@@ -5,6 +5,6 @@
 #define PQ_HET_NAME "het"
 #define PQ_HET_DESC "Calculate heterozygosity"
 
-extern void PQ_HET_INIT(struct SWrap *wrap, int nsam);
+extern void pq_het_init(struct SWrap *wrap, int nsam);
 
 #endif

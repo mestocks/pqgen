@@ -38,7 +38,7 @@ struct pq_command CMD[] =
     {.name = PQ_HET_NAME,
      .desc = PQ_HET_DESC,
      .frmt = PQ_HET_FRMT,
-     .init = PQ_HET_INIT},
+     .init = pq_het_init},
     
     {.name = PQ_PNDS_NAME,
      .desc = PQ_PNDS_DESC,
@@ -48,12 +48,12 @@ struct pq_command CMD[] =
     {.name = PQ_SFS_NAME,
      .desc = PQ_SFS_DESC,
      .frmt = PQ_SFS_FRMT,
-     .init = PQ_SFS_INIT},
+     .init = pq_sfs_init},
     
     {.name = PQ_THETA_NAME,
      .desc = PQ_THETA_DESC,
      .frmt = PQ_THETA_FRMT,
-     .init = PQ_THETA_INIT}
+     .init = pq_theta_init}
   };
 
 void display_help()

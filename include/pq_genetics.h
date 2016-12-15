@@ -6,6 +6,8 @@ extern void pq_dna_upper(char *codon);
 extern void pq_reverse(char *codon);
 extern unsigned int pq_alldna(const char *dna);
 
+extern void pq_gtstat(void **info, char **array);
+
 extern struct rwkHashTable CODON_TO_NSYN;
 extern struct rwkHashTable CODON_TO_AMINO;
 
