@@ -1,6 +1,7 @@
 #ifndef pq_generics_h__
 #define pq_generics_h__
 
+// StatObject
 
 struct SWrap {
   int nsam;

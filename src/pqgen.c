@@ -25,6 +25,7 @@ struct pq_command {
   int frmt;
   const char *name;
   const char *desc;
+  const char *defs;
   void (*init)(struct SWrap *, int);
 };
 
@@ -33,27 +34,32 @@ struct pq_command CMD[] =
     {.name = PQ_DIV_NAME,
      .desc = PQ_DIV_DESC,
      .frmt = PQ_DIV_FRMT,
-     .init = PQ_DIV_INIT},
+     .init = PQ_DIV_INIT,
+     .defs = "-f 1 -c 1 -p 3 -k 5,6 -b 1 -d '\t'"},
     
     {.name = PQ_HET_NAME,
      .desc = PQ_HET_DESC,
      .frmt = PQ_HET_FRMT,
-     .init = pq_het_init},
+     .init = pq_het_init,
+     .defs = "-f 1 -c 1 -p 3 -k 5-%d -b 1 -d '\t'"},
     
     {.name = PQ_PNDS_NAME,
      .desc = PQ_PNDS_DESC,
      .frmt = PQ_PNDS_FRMT,
-     .init = PQ_PNDS_INIT},
+     .init = PQ_PNDS_INIT,
+     .defs = "-f 1 -c 1 -p 3 -k 7-%d -d '\t'"},
     
     {.name = PQ_SFS_NAME,
      .desc = PQ_SFS_DESC,
      .frmt = PQ_SFS_FRMT,
-     .init = pq_sfs_init},
+     .init = pq_sfs_init,
+     .defs = "-f 1 -c 1 -p 3 -k 5-%d -d '\t'"},
     
     {.name = PQ_THETA_NAME,
      .desc = PQ_THETA_DESC,
      .frmt = PQ_THETA_FRMT,
-     .init = pq_theta_init}
+     .init = pq_theta_init,
+     .defs = PQ_THETA_DEFS}
   };
 
 void display_help()
@@ -92,7 +98,9 @@ int main(int argc, char **argv)
   int i;
   int ncmds;
   int frm_multi;
+  const char *cmd_defaults;
   struct SWrap Stat;
+  
   void (*swrap_init)(struct SWrap *, int);
   
   i = 0;
@@ -101,6 +109,7 @@ int main(int argc, char **argv)
     if (strcmp(argv[1], CMD[i].name) == 0) {
       frm_multi = CMD[i].frmt;
       swrap_init = CMD[i].init;
+      cmd_defaults = CMD[i].defs;
       break;
     }
     i++;
@@ -135,11 +144,12 @@ int main(int argc, char **argv)
   int ncols;
   int nalleles;
   char buffer[PQ_LWIDTH];
-  const char delim = '\t';
+  char delim = '\t';
 
   char chr[PQ_LCOL];
   char factor[PQ_LCOL];
   unsigned long long int startpos;
+
   unsigned long long int stoppos;
   unsigned long long int start_region;
   unsigned long long int stop_region;
@@ -153,26 +163,26 @@ int main(int argc, char **argv)
   struct GenericRow row;
   
   while (fgets(buffer, sizeof(buffer), stdin)) {
+    
     if (row_index == 0) {
-      ncols = rwk_countcols(buffer, &delim);
 
-      if (strcmp(argv[1], "theta") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
-      } else if (strcmp(argv[1], "het") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d -b 1", ncols);
-      } else if (strcmp(argv[1], "sfs") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5-%d", ncols);
-      } else if (strcmp(argv[1], "div") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 5,6 -b 1");
-      } else if (strcmp(argv[1], "pnds") == 0) {
-	sprintf(defaults, "-f 1 -c 1 -p 3 -k 7-%d", ncols);
-      }
+      // add defaults but with dummy -k variable
+      sprintf(defaults, cmd_defaults, 6);
       
       nargs = rwk_countcols(defaults, " ");
       def_array = calloc(nargs, sizeof(char *));
       rwk_str2array(def_array, defaults, nargs, " ");
       
       pq_init_args();
+      pq_update_args(nargs, def_array);
+      pq_update_args(argc-2, argv+2);
+      
+      // space delimeters must be escaped on the command line (i.e. -d '\ ')
+      delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
+      ncols = rwk_countcols(buffer, &delim);
+      sprintf(defaults, cmd_defaults, ncols);
+      rwk_str2array(def_array, defaults, nargs, " ");
+      
       pq_update_args(nargs, def_array);
       pq_update_args(argc-2, argv+2);
       
@@ -184,7 +194,7 @@ int main(int argc, char **argv)
       swrap_init(&Stat, nalleles);
       
       row_index = 1;
-    }
+    }    
     
     row.update(&row, buffer, &delim);
 
