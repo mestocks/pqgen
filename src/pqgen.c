@@ -186,24 +186,20 @@ int main(int argc, char **argv)
   swrap_init(&Stat, nalleles);
 
   row.update(&row, buffer, &delim);
-
-  stoppos = row.pos(&row);
-  startpos = stoppos - 1;
-
   strcpy(chr, row.chrom(&row));
   strcpy(factor, row.factor(&row));
-  start_region = startpos;
-
+  start_region = row.pos(&row) - 1;
+  
   goto POST_INIT;
   
   while (fgets(buffer, sizeof(buffer), stdin)) {
     
     row.update(&row, buffer, &delim);
 
+  POST_INIT:
+    
     stoppos = row.pos(&row);
     startpos = stoppos - 1;
-
-  POST_INIT:
     
     if (strcmp(row.factor(&row), factor) != 0) {
       Stat.write(&Stat);

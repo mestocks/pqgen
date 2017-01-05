@@ -23,6 +23,7 @@ void pq_swupdate_theta(struct SWrap *wrap, char **array)
       *(long long int *)wrap->values[1] += 1;
     }
     *(long long int *)wrap->values[2] += pqPairwiseDiffs(wrap->nsam, nref);
+    //*(long long int *)wrap->values[2] += nref * (wrap->nsam - nref);
     *(long long int *)wrap->values[0] += 1;
   }
 }
