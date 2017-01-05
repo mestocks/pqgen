@@ -127,10 +127,9 @@ void pq_gtstat(void **info, char **array)
   /*
    * Add genotypes to array. 
    *
-   * The c standard requires that 
-   * the character set for digits is in numerical order so 
-   * their numerical value can be obtained simply by subtracting 
-   * '0'.
+   * The c standard requires that the character set for 
+   * digits is in numerical order so their numerical value 
+   * can be obtained simply by subtracting '0'.
   */
   
   ngenos = 0;
