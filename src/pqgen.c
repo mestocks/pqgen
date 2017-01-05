@@ -153,61 +153,58 @@ int main(int argc, char **argv)
   unsigned long long int stoppos;
   unsigned long long int start_region;
   unsigned long long int stop_region;
-
-  int row_index;
-  int startindex;
-
-  row_index = 0;
-  startindex = 0;
   
   struct GenericRow row;
+
+  fgets(buffer, sizeof(buffer), stdin);
+
+  // add defaults but with dummy -k variable
+  sprintf(defaults, cmd_defaults, 6);
+  
+  nargs = rwk_countcols(defaults, " ");
+  def_array = calloc(nargs, sizeof(char *));
+  rwk_str2array(def_array, defaults, nargs, " ");
+  
+  pq_init_args();
+  pq_update_args(nargs, def_array);
+  pq_update_args(argc-2, argv+2);
+  
+  // space delimeters must be escaped on the command line (i.e. -d '\ ')
+  delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
+  ncols = rwk_countcols(buffer, &delim);
+  sprintf(defaults, cmd_defaults, ncols);
+  rwk_str2array(def_array, defaults, nargs, " ");
+  
+  pq_update_args(nargs, def_array);
+  pq_update_args(argc-2, argv+2);
+  
+  free(def_array);
+  
+  init_row(&row, ncols, CHROM, POS, FCOL);
+  
+  nalleles = frm_multi * NKARGS;
+  swrap_init(&Stat, nalleles);
+
+  row.update(&row, buffer, &delim);
+
+  stoppos = row.pos(&row);
+  startpos = stoppos - 1;
+
+  strcpy(chr, row.chrom(&row));
+  strcpy(factor, row.factor(&row));
+  start_region = startpos;
+
+  goto POST_INIT;
   
   while (fgets(buffer, sizeof(buffer), stdin)) {
-    
-    if (row_index == 0) {
-
-      // add defaults but with dummy -k variable
-      sprintf(defaults, cmd_defaults, 6);
-      
-      nargs = rwk_countcols(defaults, " ");
-      def_array = calloc(nargs, sizeof(char *));
-      rwk_str2array(def_array, defaults, nargs, " ");
-      
-      pq_init_args();
-      pq_update_args(nargs, def_array);
-      pq_update_args(argc-2, argv+2);
-      
-      // space delimeters must be escaped on the command line (i.e. -d '\ ')
-      delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
-      ncols = rwk_countcols(buffer, &delim);
-      sprintf(defaults, cmd_defaults, ncols);
-      rwk_str2array(def_array, defaults, nargs, " ");
-      
-      pq_update_args(nargs, def_array);
-      pq_update_args(argc-2, argv+2);
-      
-      free(def_array);
-
-      init_row(&row, ncols, CHROM, POS, FCOL);
-
-      nalleles = frm_multi * NKARGS;
-      swrap_init(&Stat, nalleles);
-      
-      row_index = 1;
-    }    
     
     row.update(&row, buffer, &delim);
 
     stoppos = row.pos(&row);
     startpos = stoppos - 1;
 
-    if (startindex == 0) {
-      strcpy(chr, row.chrom(&row));
-      strcpy(factor, row.factor(&row));
-      start_region = startpos;
-      startindex = 1;
-    }
-
+  POST_INIT:
+    
     if (strcmp(row.factor(&row), factor) != 0) {
       Stat.write(&Stat);
       printf("%s\t%llu\t%llu\t%s", chr, start_region, stop_region, factor);
