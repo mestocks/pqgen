@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <rwk_args.h>
 #include <rwk_parse.h>
@@ -136,6 +137,8 @@ int main(int argc, char **argv)
     file2charHash(fname_aa, 128);
     file2doubleHash(fname_syn, 128);
   }
+
+  FILE *fp;
   
   int nargs;
   char **def_array;
@@ -156,7 +159,16 @@ int main(int argc, char **argv)
   
   struct GenericRow row;
 
-  fgets(buffer, sizeof(buffer), stdin);
+  int argc_wo_file;
+  
+  fp = stdin;
+  argc_wo_file = argc;
+  if (argc > 2 && access(argv[argc - 1], F_OK) != -1) {
+    fp = fopen(argv[argc - 1], "r");
+    argc_wo_file = argc - 1;
+  }
+    
+  fgets(buffer, sizeof(buffer), fp);
 
   // add defaults but with dummy -k variable
   sprintf(defaults, cmd_defaults, 6);
@@ -167,7 +179,7 @@ int main(int argc, char **argv)
   
   pq_init_args();
   pq_update_args(nargs, def_array);
-  pq_update_args(argc-2, argv+2);
+  pq_update_args(argc_wo_file-2, argv+2);
   
   // space delimeters must be escaped on the command line (i.e. -d '\ ')
   delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
@@ -176,7 +188,7 @@ int main(int argc, char **argv)
   rwk_str2array(def_array, defaults, nargs, " ");
   
   pq_update_args(nargs, def_array);
-  pq_update_args(argc-2, argv+2);
+  pq_update_args(argc_wo_file-2, argv+2);
   
   free(def_array);
   
@@ -192,7 +204,7 @@ int main(int argc, char **argv)
   
   goto POST_INIT;
   
-  while (fgets(buffer, sizeof(buffer), stdin)) {
+  while (fgets(buffer, sizeof(buffer), fp)) {
     
     row.update(&row, buffer, &delim);
 
@@ -234,6 +246,7 @@ int main(int argc, char **argv)
   pq_free_args();
   pq_swfree(&Stat);
   free_row(&row);
+  fclose(fp);
   
   return 0;
 }
