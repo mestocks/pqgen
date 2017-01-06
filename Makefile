@@ -1,51 +1,44 @@
-name = pqgen
-cmds = pqgen pq-dna2codon pq-gen2hwe
-docs = pqgen.1
-headers = pq_args pq_div pq_generics pq_genetics pq_het pq_pnds pq_sfstats pq_parse pq_sfs pq_theta pq_version
-libname = lib$(name)
-info = codon2aa codon2syn
-
 HOME = $(shell echo $$HOME)/
-BASE = $(HOME).local/
-INSTALL = $(HOME).local/
-
-CONFIG = $(HOME).config/$(name)/
+NAME = pqgen
+DOCS = pqgen.1
+CMDS = pqgen pq-dna2codon pq-gen2hwe
+HEADERS = pq_args pq_div pq_generics pq_genetics pq_het pq_parse pq_pnds pq_sfs pq_sfstats pq_theta pq_version
+DEPINC = $(HOME).local/
+PREFIX = $(HOME).local/
+CONFIG = $(HOME).config/$(NAME)/
 
 Wgcc = -Wall -Wextra -Wpedantic
-
-###
 
 bin = bin/
 inc = include/
 lib = lib/
-obj = obj/
 man = doc/
 share = share/
 src = src/
 
-bins = $(addprefix $(bin),$(cmds))
-incs = $(addsuffix .h,$(addprefix $(inc),$(headers)))
-libs = $(lib)$(libname).so
-mans = $(addprefix $(man),$(docs))
-objs = $(addsuffix .o,$(addprefix $(obj),$(headers)))
-srcs = $(addprefix $(src),$(addsuffix .c,$(headers)))
+bins = $(addprefix $(bin),$(CMDS))
+srcs = $(addprefix $(src),$(addsuffix .c,$(HEADERS)))
+
 
 ######
 
 .PHONY:	all
-all:	$(bins) $(libs) $(man)pqgen.1
+all:	binaries documentation
+
+
+######
+
+.PHONY:	binaries
+binaries:	$(bins)
 
 $(bin)%:	$(src)%.c $(srcs)
 	mkdir -p $(bin)
-	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ $(Wgcc) -o $@ $^ -lrawk -lm
+	gcc -I $(inc) -I $(DEPINC)$(inc)librawk/ -L $(DEPINC)$(lib) $(Wgcc) -o $@ $^ -lrawk -lm
 
-$(libs):	$(objs)
-	mkdir -p $(lib)
-	gcc -shared -o $@ $^
 
-$(obj)%.o:	$(src)%.c
-	mkdir -p $(obj)
-	gcc -I $(inc) -I $(BASE)include/librawk/ -L $(BASE)lib/ -c $(Wgcc) -fpic -o $@ $^ -lrawk
+
+.PHONY:	documentation
+documentation:	$(man)pqgen.1
 
 $(man)pqgen.1:	$(man)pqgen-TH $(man)pqgen-body
 	cat $^ > $@
@@ -53,57 +46,35 @@ $(man)pqgen.1:	$(man)pqgen-TH $(man)pqgen-body
 $(man)pqgen-TH:	$(bin)pqgen
 	./$^ --version | cut -d' ' -f 1,3 | awk ' { print ".TH pq-genetics 1 \""strftime("%Y-%m-%d")"\" \""$$0"\" \"Population and Quantitative Genetic Tools\""} ' > $@
 
-###
-
-.PHONY:	clean
-clean:
-	-rm $(bins) $(objs) $(libs)
 
 ######
 
-ibin = $(INSTALL)$(bin)
-ilib = $(INSTALL)$(lib)
-iman = $(INSTALL)share/man/man1/
-iinc = $(INSTALL)$(inc)$(libname)/
-ishare = $(INSTALL)share/$(libname)/
-iconfig = $(CONFIG)
+.PHONY:	clean
+clean:
+	-rm $(bins) $(mans)
 
-IBIN = $(addprefix $(ibin),$(cmds))
-IINC = $(addsuffix .h,$(addprefix $(iinc),$(headers)))
-ILIB = $(addprefix $(INSTALL),$(libs))
-IMAN = $(addprefix $(iman),$(docs))
-ISHARE = $(addprefix $(ishare),$(info))
-ICONFIG = $(addprefix $(iconfig),$(info))
+
+######
 
 .PHONY:	install
-install:	$(IBIN) $(IINC) $(ILIB) $(IMAN) $(ICONFIG)
+install:	$(PREFIX)bin/pqgen $(PREFIX)share/man/man1/pqgen.1 $(CONFIG)codon2aa $(CONFIG)codon2syn
 
-$(ibin)%:	$(bin)%
-	mkdir -p $(ibin)
+$(PREFIX)bin/%:	$(bin)%
+	mkdir -p $(prefix)bin/
 	cp $^ $@
 
-$(iinc)%.h:	$(inc)%.h
-	mkdir -p $(iinc)
+$(PREFIX)share/man/man1/%:	$(man)%
+	mkdir -p $(PREFIX)share/man/man1/
 	cp $^ $@
 
-$(ilib)%.so:	$(lib)%.so
-	mkdir -p $(ilib)
+$(CONFIG)%:	share/%
+	mkdir -p $(CONFIG)
 	cp $^ $@
 
-$(iman)%.1:	$(man)%.1
-	mkdir -p $(iman)
-	cp $^ $@
 
-$(ishare)%:	$(share)%
-	mkdir -p $(ishare)
-	cp $^ $@
-
-$(iconfig)%:	$(share)%
-	mkdir -p $(iconfig)
-	cp $^ $@
-
-###
+######
 
 .PHONY:	uninstall
 uninstall:
-	-rm $(IBIN) $(IINC) $(ILIB) $(IMAN) $(ICONFIG)
+	-rm $(PREFIX)bin/pqgen $(PREFIX)share/man/man1/pqgen.1 $(CONFIG)codon2aa $(CONFIG)codon2syn
+
