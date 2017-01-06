@@ -67,12 +67,16 @@ Contig1	0	865787	Contig1	10	862828	12965	0.005312	0.005468	0.148427
 Contig2	0	786857	Contig2	10	783622	15404	0.006949	0.007175	0.163521
 ```
 
-Bonus commands:
+## Bonus commands:
 
-  div          Calculate divergence based statistics. The input format is slightly different. For example: "Contig0    <pos0>    1    <name>    A    G"
+```bash
+  div          Calculate divergence based statistics. The input format is slightly 
+               different. For example: "Contig0    <pos0>    1    <name>    A    G"
 
-  pnds         Count the number of silent and replacement substitutions and polymorphisms. The input format is slightly different. For example: "Contig0    <pos0>    1    <name>    AAA    AAG    AAA    AAA   AAG"
-
+  pnds         Count the number of silent and replacement substitutions and polymorphisms. 
+               The input format is slightly different. 
+               For example: "Contig0    <pos0>    1    <name>    AAA    AAG    AAA    AAA   AAG"
+```
 
 
 
