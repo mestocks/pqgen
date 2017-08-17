@@ -29,7 +29,30 @@ chr1      676157  676160  transcript1       0.65   +       ACG     ACA
 #include <string.h>
 
 #include <rwk_parse.h>
-#include <pq_genetics.h>
+
+void _complement(char *codon) {
+  int bp;
+  for (bp = 0; bp < 3; bp++) {
+    switch (codon[bp]) {
+    case 'A': codon[bp] = 'T'; break;
+    case 'T': codon[bp] = 'A'; break;
+    case 'G': codon[bp] = 'C'; break;
+    case 'C': codon[bp] = 'G'; break;
+    case 'a': codon[bp] = 't'; break;
+    case 't': codon[bp] = 'a'; break;
+    case 'g': codon[bp] = 'c'; break;
+    case 'c': codon[bp] = 'g'; break;
+    default: codon[bp] = codon[bp];
+    }
+  }
+}
+
+void _reverse(char *codon) {
+  char one  = codon[0];
+  char three = codon[2];
+  codon[0] = three;
+  codon[2] = one;
+}
 
 int main(int argc, char **argv)
 {
@@ -89,8 +112,8 @@ int main(int argc, char **argv)
       
       for (ismp = 0; ismp < nnuc; ismp++) {
 	if ('-' == *array[5]) {
-	  pq_reverse(codons[ismp]);
-	  pq_complement(codons[ismp]);
+	  _reverse(codons[ismp]);
+	  _complement(codons[ismp]);
 	}
 	printf("\t%s", codons[ismp]);
       }
