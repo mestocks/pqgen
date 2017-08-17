@@ -1,0 +1,18 @@
+        pq-genetics
+        ===========
+
+Installation
+------------
+
+wget https://github.com/mspopgen/pq-genetics/releases/download/v${version}/pqgen-${version}.tar.gz
+tar -zxvf pqgen-${version}.tar.gz
+cd pqgen-${version}
+
+./configure
+make
+make install
+
+Note:
+- Admin permissions may be required for the final installation step.
+- The installation path can be changed using './configure --prefix=<path/to/dir>'
+
