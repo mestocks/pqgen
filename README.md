@@ -24,18 +24,18 @@ Input format:
   	chrom    start    end    name    GT.1    GT.2  ...  GT.n
 
   where GT.1 to GT.n are the genotypes of each individual given in GT format.
-  This can be generated from vcf format using bcftools:
-
-       bcftools query -f "%CHROM\t<pos0>\t%POS\t<name>[\t%GT]\n" aln.vcf
-
-  Giving for example:
+  For example:
 
        Contig0    <pos0>    1    <name>    0/0    0/0    0/1    0/0    0/1
        Contig0    <pos0>    2    <name>    0/0    0/0    0/0    0/0    0/0
        Contig0    <pos0>    3    <name>    0/1    0/1    0/0    0/0    0/1
 
+  This can be generated from vcf format using bcftools:
 
-Common options:
+       bcftools query -f "%CHROM\t<pos0>\t%POS\t<name>[\t%GT]\n" aln.vcf
+
+
+Options:
 
   -c <int>
      Column number (1-indexed) giving the chromosome.
@@ -67,13 +67,23 @@ Contig1	0	865787	Contig1	10	862828	12965	0.005312	0.005468	0.148427
 Contig2	0	786857	Contig2	10	783622	15404	0.006949	0.007175	0.163521
 ```
 
-Bonus commands:
+Bonus scripts:
 
-  div          Calculate divergence based statistics. The input format is slightly different. For example: "Contig0    <pos0>    1    <name>    A    G"
+dna2codon - Collapse consecutive dna sequences into codons.
 
-  pnds         Count the number of silent and replacement substitutions and polymorphisms. The input format is slightly different. For example: "Contig0    <pos0>    1    <name>    AAA    AAG    AAA    AAA   AAG"
+	Input example:
+	"Contig0    <pos0>    1    <name>    0.65	+	A    G	..."
 
+dna2div - Calculate divergence based statistics. A maximum of two alleles should be given.
 
+	Input example:
+	"Contig0    <pos0>    1    <name>    A	G"
+
+codon2pnds - Count the number of silent and replacement substitutions and polymorphisms. The
+	     first codon is the outgroup/ancestral codon.
+
+	Input example:
+	"Contig0    <pos0>    1    <name>    ATG    ATG	..."
 
 
 ## Quick install
@@ -82,13 +92,15 @@ Bonus commands:
 
 Once **librawk** is installed, download and unpack the latest version of **pq-genetics** (replacing *X*, *Y* and *Z* with the version number):
 ```bash
-wget https://github.com/mspopgen/pq-genetics/archive/vX.Y.Z.tar.gz
-tar -zxvf vX.Y.Z.tar.gz
+wget https://github.com/mspopgen/pq-genetics/releases/download/vX.Y.Z/pqgen-X.Y.Z.tar.gz
+tar -zxvf pqgen-X.Y.Z.tar.gz
 ```
 Then change into the **pq-genetics** directory, compile the source and install it:
 ```bash
-cd pq-genetics-X.Y.Z
+cd pqgen-X.Y.Z
+./configure
 make
 make install
 ```
-This will install the compiled code into ```~/.local/``` and put configuration files into ```~/.config/pqgen/```. To call the commands from any directory, add ```~/.local/bin``` to your ```PATH``` environmental variable.
+
+If **librawk** has been installed in a non-standard location then you may need to use './configure --prefix=<path/to/dir>'. Admin permissions may be required for the final installation step.
