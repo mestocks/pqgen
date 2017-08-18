@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([pqgen], [0.2.6], [mestocks@protonmail.com])
+AC_INIT([pqgen], [0.2.7], [mestocks@protonmail.com])
 
 AC_PROG_CC
 AC_PROG_INSTALL
