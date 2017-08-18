@@ -12,7 +12,7 @@ AC_ENABLE_SHARED
 AC_DISABLE_STATIC
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_MACRO_DIRS([m4])
-AC_CONFIG_SRCDIR([src/pqgen.c])
+AC_CONFIG_SRCDIR([src/main.c])
 
 AC_CHECK_HEADERS([stdio.h stdlib.h string.h unistd.h])
 AC_CHECK_HEADERS([librawk/rwk_htable.h librawk/rwk_parse.h], [], [], [])
