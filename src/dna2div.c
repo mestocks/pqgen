@@ -11,69 +11,14 @@
 #include <pq_parse.h>
 #include <pq_limits.h>
 #include <pq_generics.h>
-#include <pq_genetics.h>
-
-#include <pq_het.h>
-#include <pq_sfs.h>
-#include <pq_theta.h>
-
+#include <pq_div.h>
 #include <pq_help.h>
 #include <pq_version.h>
 
-struct pq_command {
-  int frmt;
-  const char *name;
-  const char *desc;
-  const char *defs;
-  void (*init)(struct SWrap *, int);
-};
-
-struct pq_command CMD[] =
-  {
-    {.name = PQ_HET_NAME,
-     .desc = PQ_HET_DESC,
-     .frmt = PQ_HET_FRMT,
-     .init = pq_het_init,
-     .defs = PQ_HET_DEFS},
-
-    {.name = PQ_SFS_NAME,
-     .desc = PQ_SFS_DESC,
-     .frmt = PQ_SFS_FRMT,
-     .init = pq_sfs_init,
-     .defs = PQ_SFS_DEFS},
-    
-    {.name = PQ_THETA_NAME,
-     .desc = PQ_THETA_DESC,
-     .frmt = PQ_THETA_FRMT,
-     .init = pq_theta_init,
-     .defs = PQ_THETA_DEFS}
-  };
-
-void display_help()
-{
-  fprintf(stderr, "usage: %s\n\n", PQ_USAGE);
-
-  int i;
-  int ncmds;
-  int tsize;
-  tsize = 11;
-  ncmds = sizeof(CMD) / sizeof(CMD[0]);
-  for (i = 0; i < ncmds; i++) {
-    char gap[] = "           ";
-    gap[tsize - strlen(CMD[i].name)] = '\0';
-    fprintf(stderr, "   %s%s%s\n", CMD[i].name, gap, CMD[i].desc);
-  }
-}
-
 int main(int argc, char **argv)
 {
-  if (argc == 1) {
-    display_help();
-    exit(0);
-  }
-
   if (argc > 1 && strcmp(argv[1], "--help") == 0) {
-    display_help();
+    printf("Help!\n");
     exit(0);
   }
 
@@ -83,29 +28,15 @@ int main(int argc, char **argv)
   }
 
   int i;
-  int ncmds;
   int frm_multi;
   const char *cmd_defaults;
   struct SWrap Stat;
   
   void (*swrap_init)(struct SWrap *, int);
-  
-  i = 0;
-  ncmds = sizeof(CMD) / sizeof(CMD[0]);
-  while (i < ncmds) {
-    if (strcmp(argv[1], CMD[i].name) == 0) {
-      frm_multi = CMD[i].frmt;
-      swrap_init = CMD[i].init;
-      cmd_defaults = CMD[i].defs;
-      break;
-    }
-    i++;
-  }
-  
-  if (i == ncmds) {
-    fprintf(stderr, "pqgen: '%s' is not a command. See 'pqgen --help'.\n", argv[1]);
-    exit(0);
-  }
+
+  frm_multi = PQ_DIV_FRMT;
+  swrap_init = PQ_DIV_INIT;
+  cmd_defaults = PQ_DIV_DEFS;
 
   FILE *fp;
   
@@ -132,7 +63,7 @@ int main(int argc, char **argv)
   
   fp = stdin;
   argc_wo_file = argc;
-  if (argc > 2 && access(argv[argc - 1], F_OK) != -1) {
+  if (argc > 1 && access(argv[argc - 1], F_OK) != -1) {
     fp = fopen(argv[argc - 1], "r");
     argc_wo_file = argc - 1;
   }
@@ -148,7 +79,7 @@ int main(int argc, char **argv)
   
   pq_init_args();
   pq_update_args(nargs, def_array);
-  pq_update_args(argc_wo_file-2, argv+2);
+  pq_update_args(argc_wo_file-1, argv+1);
   
   // space delimeters must be escaped on the command line (i.e. -d '\ ')
   delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
@@ -157,7 +88,7 @@ int main(int argc, char **argv)
   rwk_str2array(def_array, defaults, nargs, " ");
   
   pq_update_args(nargs, def_array);
-  pq_update_args(argc_wo_file-2, argv+2);
+  pq_update_args(argc_wo_file-1, argv+1);
   
   free(def_array);
   
