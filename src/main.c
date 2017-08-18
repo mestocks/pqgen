@@ -16,7 +16,6 @@
 #include <pq_div.h>
 #include <pq_het.h>
 #include <pq_sfs.h>
-#include <pq_pnds.h>
 #include <pq_theta.h>
 
 #include <pq_help.h>
@@ -43,13 +42,7 @@ struct pq_command CMD[] =
      .frmt = PQ_HET_FRMT,
      .init = pq_het_init,
      .defs = PQ_HET_DEFS},
-    
-    {.name = PQ_PNDS_NAME,
-     .desc = PQ_PNDS_DESC,
-     .frmt = PQ_PNDS_FRMT,
-     .init = PQ_PNDS_INIT,
-     .defs = PQ_PNDS_DEFS},
-    
+
     {.name = PQ_SFS_NAME,
      .desc = PQ_SFS_DESC,
      .frmt = PQ_SFS_FRMT,
@@ -119,23 +112,6 @@ int main(int argc, char **argv)
   if (i == ncmds) {
     fprintf(stderr, "pqgen: '%s' is not a command. See 'pqgen --help'.\n", argv[1]);
     exit(0);
-  }
-
-  if (strcmp(argv[1], "pnds") == 0) {
-    char *home;
-    char *fname_aa;
-    char *fname_syn;
-    char default_fname_aa[] = ".config/pqgen/codon2aa";
-    char default_fname_syn[] = ".config/pqgen/codon2syn";
-    home = getenv("HOME");
-    char default_fullpath_aa[1028];
-    char default_fullpath_syn[1028];
-    sprintf(default_fullpath_aa, "%s/%s", home, default_fname_aa);
-    sprintf(default_fullpath_syn, "%s/%s", home, default_fname_syn);
-    fname_aa = default_fullpath_aa;
-    fname_syn = default_fullpath_syn;
-    file2charHash(fname_aa, 128);
-    file2doubleHash(fname_syn, 128);
   }
 
   FILE *fp;
@@ -241,8 +217,6 @@ int main(int argc, char **argv)
   printf("\n");
   Stat.clear(&Stat);
 
-  rwk_free_hash(&CODON_TO_NSYN);
-  rwk_free_hash(&CODON_TO_AMINO);
   pq_free_args();
   pq_swfree(&Stat);
   free_row(&row);
