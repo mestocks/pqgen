@@ -1,10 +1,10 @@
-        pq-genetics
+        pqgen
         ===========
 
 Installation
 ------------
 
-wget https://github.com/mspopgen/pq-genetics/releases/download/v${version}/pqgen-${version}.tar.gz
+wget https://github.com/mspopgen/pqgen/releases/download/v${version}/pqgen-${version}.tar.gz
 tar -zxvf pqgen-${version}.tar.gz
 cd pqgen-${version}
 

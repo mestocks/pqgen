@@ -1,6 +1,6 @@
 # Population and Quantitative Genetic Tools
 
-**pq-genetics** calculates population and quantitative genetic statistics from genomic data given as a file or piped via standard input. The focus is on speed and ease of use, especially with regard to the input format.
+**pqgen** calculates population and quantitative genetic statistics from genomic data given as a file or piped via standard input. The focus is on speed and ease of use, especially with regard to the input format.
 
 ```bash
 Usage:
@@ -95,14 +95,14 @@ codon2pnds - Count the number of silent and replacement substitutions and polymo
 
 ## Quick install
 
-**pq-genetics** makes use of the library **librawk**. To install this dependency, go [here](https://github.com/mspopgen/librawk).
+**pqgen** makes use of the library **librawk**. To install this dependency, go [here](https://github.com/mspopgen/librawk).
 
-Once **librawk** is installed, download and unpack the latest version of **pq-genetics** (replacing *X*, *Y* and *Z* with the version number):
+Once **librawk** is installed, download and unpack the latest version of **pqgen** (replacing *X*, *Y* and *Z* with the version number):
 ```bash
-wget https://github.com/mspopgen/pq-genetics/releases/download/vX.Y.Z/pqgen-X.Y.Z.tar.gz
+wget https://github.com/mspopgen/pqgen/releases/download/vX.Y.Z/pqgen-X.Y.Z.tar.gz
 tar -zxvf pqgen-X.Y.Z.tar.gz
 ```
-Then change into the **pq-genetics** directory, compile the source and install it:
+Then change into the **pqgen** directory, compile the source and install it:
 ```bash
 cd pqgen-X.Y.Z
 ./configure
