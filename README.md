@@ -38,7 +38,7 @@ Input format:
 Options:
 
   -c <int>
-     Column number (1-indexed) giving the chromosome.
+     Column number (1-indexed) giving the chromosome/contig/scaffold ID.
 
   -d <char>
      Delimiter separating each column. Must be enclosed in single quotes, spaces
@@ -60,7 +60,8 @@ Options:
 ## Example
 
 ```bash
-$ bcftools query -f "%CHROM\t<pos0>\t%POS\t<name>[\t%GT]\n" Contig012.vcf | pqgen theta
+$ bcftools query -f "%CHROM\t<pos0>\t%POS\t<name>[\t%GT]\n" Contig012.vcf > Contig012.gt.bed
+$ pqgen theta Contig012.gt.bed
 
 Contig0	0	1372378	Contig0	10	1367408	15844	0.004096	0.004072	-0.029052
 Contig1	0	865787	Contig1	10	862828	12965	0.005312	0.005468	0.148427
@@ -71,19 +72,25 @@ Bonus scripts:
 
 dna2codon - Collapse consecutive dna sequences into codons.
 
-	Input example:
+	Input format:
+	```bash
 	"Contig0    <pos0>    1    <name>    0.65	+	A    G	..."
+	```
 
 dna2div - Calculate divergence based statistics. A maximum of two alleles should be given.
 
-	Input example:
+	Input format:
+	```bash
 	"Contig0    <pos0>    1    <name>    A	G"
+	```
 
 codon2pnds - Count the number of silent and replacement substitutions and polymorphisms. The
 	     first codon is the outgroup/ancestral codon.
 
-	Input example:
+	Input format:
+	```bash
 	"Contig0    <pos0>    1    <name>    ATG    ATG	..."
+	```
 
 
 ## Quick install
