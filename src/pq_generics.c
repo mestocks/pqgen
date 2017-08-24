@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#include <rwk_args.h>
-#include <rwk_htable.h>
 #include <pq_generics.h>
 
 

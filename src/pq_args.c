@@ -1,6 +1,7 @@
 #include <stdlib.h>
+#include <stdio.h>
 
-#include <rwk_args.h>
+#include <rwk_parse.h>
 #include <rwk_htable.h>
 
 int *KCOLS;
@@ -11,7 +12,8 @@ unsigned int FCOL;
 struct rwkHashTable ARGHASH;
 
 void pq_update_args(unsigned int argc, char **argv)
-{  
+{
+  int k;
   char *chr_ptr;
   char *end_ptr;
   char *kcol_ptr;
@@ -31,9 +33,12 @@ void pq_update_args(unsigned int argc, char **argv)
     free(KCOLS);
   }
 
-  NKARGS = rwk_countkargs(kcol_ptr);
+  NKARGS = rwk_nkrange(kcol_ptr);
   KCOLS = malloc(NKARGS * sizeof(int));
-  rwk_kargsplit(KCOLS, kcol_ptr);
+  rwk_k2array(KCOLS, kcol_ptr, NKARGS);
+  for (k = 0; k < NKARGS; k++) {
+    KCOLS[k]--;
+  }
 }
 
 void pq_init_args()

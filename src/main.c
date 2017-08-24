@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <rwk_args.h>
 #include <rwk_parse.h>
 #include <rwk_htable.h>
 
