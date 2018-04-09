@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_parse.h>
+#include <pq_parse.h>
+
 #include <rwk_htable.h>
 
 #include <pq_args.h>
@@ -187,7 +188,7 @@ void file2doubleHash(char *fname, int hsize) {
   array = calloc(2, sizeof (char*));
   
   while (fgets(buffer, sizeof(buffer), fp)) {
-    if (rwk_str2array(array, buffer, 2, &delim) == -1) {
+    if (pq_str2array(array, buffer, 2, &delim) == -1) {
       free(array);
       rwk_free_hash(&CODON_TO_NSYN);
       fclose(fp);
@@ -217,7 +218,7 @@ void file2charHash(char *fname, int hsize) {
   array = calloc(2, sizeof (char*));
   
   while (fgets(buffer, sizeof(buffer), fp)) {
-    if (rwk_str2array(array, buffer, 2, &delim) == -1) {
+    if (pq_str2array(array, buffer, 2, &delim) == -1) {
       free(array);
       rwk_free_hash(&CODON_TO_AMINO);
       fclose(fp);

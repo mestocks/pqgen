@@ -28,7 +28,7 @@ chr1      676157  676160  transcript1       0.65   +       ACG     ACA
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_parse.h>
+#include <pq_parse.h>
 
 void _complement(char *codon) {
   int bp;
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin)) {
 
     if (irow == 0) {
-      ncols = rwk_countcols(buffer, &delim);
+      ncols = pq_countcols(buffer, &delim);
       array = calloc(ncols, sizeof (char*));
       nnuc = ncols - 6;
       codons = calloc(nnuc, sizeof (char*));
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 	codons[ismp][3] = '\0';
       }
     }
-    if (rwk_str2array(array, buffer, ncols, &delim) == -1) {
+    if (pq_str2array(array, buffer, ncols, &delim) == -1) {
       for (ismp = 0; ismp < nnuc; ismp++) {
 	free(codons[ismp]);
       }

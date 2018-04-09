@@ -1,6 +1,11 @@
 #ifndef pq_parse_h__
 #define pq_parse_h__
 
+extern int pq_nkrange(char *text);
+extern void pq_k2array(int *array, char *text, int nk);
+extern int pq_countcols(const char *buffer, const char *delim);
+extern int pq_str2array(char **array, char *buffer, const int ncols, const char *delim);
+
 struct GenericRow {
   char **array;
   int row_index;

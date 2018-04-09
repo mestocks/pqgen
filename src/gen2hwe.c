@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <rwk_parse.h>
+#include <pq_parse.h>
 
 #define COLOR "\x1B[33m"
 #define NORMAL "\x1B[0m"
@@ -135,11 +135,11 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin)) {
 
     if (rown == 0) {
-      ncols = rwk_countcols(buffer, &delim);
+      ncols = pq_countcols(buffer, &delim);
       array = calloc(ncols, sizeof (char *));
     }
 
-    if (rwk_str2array(array, buffer, ncols, &delim) == -1) {
+    if (pq_str2array(array, buffer, ncols, &delim) == -1) {
       free(array);
       exit(1);
     }

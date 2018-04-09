@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <rwk_parse.h>
 #include <rwk_htable.h>
 
 #include <pq_args.h>
@@ -88,9 +87,9 @@ int main(int argc, char **argv)
   // add defaults but with dummy -k variable
   sprintf(defaults, cmd_defaults, 6);
   
-  nargs = rwk_countcols(defaults, " ");
+  nargs = pq_countcols(defaults, " ");
   def_array = calloc(nargs, sizeof(char *));
-  rwk_str2array(def_array, defaults, nargs, " ");
+  pq_str2array(def_array, defaults, nargs, " ");
   
   pq_init_args();
   pq_update_args(nargs, def_array);
@@ -98,9 +97,9 @@ int main(int argc, char **argv)
   
   // space delimeters must be escaped on the command line (i.e. -d '\ ')
   delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
-  ncols = rwk_countcols(buffer, &delim);
+  ncols = pq_countcols(buffer, &delim);
   sprintf(defaults, cmd_defaults, ncols);
-  rwk_str2array(def_array, defaults, nargs, " ");
+  pq_str2array(def_array, defaults, nargs, " ");
   
   pq_update_args(nargs, def_array);
   pq_update_args(argc_wo_file-1, argv+1);

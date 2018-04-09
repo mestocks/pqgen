@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <rwk_parse.h>
+#include <pq_parse.h>
+
 #include <rwk_htable.h>
 
 int *KCOLS;
@@ -33,9 +34,9 @@ void pq_update_args(unsigned int argc, char **argv)
     free(KCOLS);
   }
 
-  NKARGS = rwk_nkrange(kcol_ptr);
+  NKARGS = pq_nkrange(kcol_ptr);
   KCOLS = malloc(NKARGS * sizeof(int));
-  rwk_k2array(KCOLS, kcol_ptr, NKARGS);
+  pq_k2array(KCOLS, kcol_ptr, NKARGS);
   for (k = 0; k < NKARGS; k++) {
     KCOLS[k]--;
   }

@@ -22,7 +22,7 @@ include/pq_help.h include/pq_het.h include/pq_limits.h include/pq_parse.h\
 include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/pq_theta.h include/pq_version.h
 
 bin_dna2codon_SOURCES = \
-src/dna2codon.c
+src/dna2codon.c src/pq_parse.c include/pq_parse.h
 
 bin_dna2div_SOURCES = \
 src/dna2div.c\
@@ -34,7 +34,7 @@ include/pq_help.h include/pq_het.h include/pq_limits.h include/pq_parse.h\
 include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/pq_theta.h include/pq_version.h
 
 bin_gen2hwe_SOURCES = \
-src/gen2hwe.c
+src/gen2hwe.c src/pq_parse.c include/pq_parse.h
 
 bin_pqgen_CFLAGS = -I $(srcdir)/include -I $(includedir)/librawk
 bin_dna2codon_CFLAGS = -I $(srcdir)/include -I $(includedir)/librawk
