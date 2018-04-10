@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_htable.h>
+#include <pq_htable.h>
 #include <pq_genetics.h>
 #include <pq_generics.h>
 #include <pq_args.h>
@@ -29,8 +29,8 @@ void pq_swupdate_pnds(struct SWrap *wrap, char **array)
 
   if (bad_codons == 0) {
     pq_dna_upper(array[KCOLS[0]]);
-    ref_aa = rwk_lookup_hash(&CODON_TO_AMINO, array[KCOLS[0]]);
-    ref_sptr = rwk_lookup_hash(&CODON_TO_NSYN, array[KCOLS[0]]);
+    ref_aa = pq_lookup_hash(&CODON_TO_AMINO, array[KCOLS[0]]);
+    ref_sptr = pq_lookup_hash(&CODON_TO_NSYN, array[KCOLS[0]]);
     syn_muts = *(double *)ref_sptr;
     nsyn_muts = 9.0 - syn_muts;
     
@@ -42,7 +42,7 @@ void pq_swupdate_pnds(struct SWrap *wrap, char **array)
     diff_nsyn = 0;
     for (k = 1; k < NKARGS; k++) {
       pq_dna_upper(array[KCOLS[k]]);
-      aptr = rwk_lookup_hash(&CODON_TO_AMINO, array[KCOLS[k]]);
+      aptr = pq_lookup_hash(&CODON_TO_AMINO, array[KCOLS[k]]);
       if (strcmp(array[KCOLS[0]], array[KCOLS[k]]) == 0) {
 	
       } else {

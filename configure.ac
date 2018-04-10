@@ -15,10 +15,8 @@ AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_SRCDIR([src/main.c])
 
 AC_CHECK_HEADERS([stdio.h stdlib.h string.h unistd.h])
-AC_CHECK_HEADERS([librawk/rwk_htable.h], [], [], [])
 
 AC_CHECK_LIB([m],[exp],,[])
-AC_CHECK_LIB([rawk],[rwk_lookup_hash],,[])
 
 AM_INIT_AUTOMAKE([subdir-objects])
 

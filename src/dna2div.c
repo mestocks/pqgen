@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <rwk_htable.h>
+#include <pq_htable.h>
 
 #include <pq_args.h>
 #include <pq_parse.h>
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
   pq_update_args(argc_wo_file-1, argv+1);
   
   // space delimeters must be escaped on the command line (i.e. -d '\ ')
-  delim = ((char *)rwk_lookup_hash(&ARGHASH, "-d"))[1];
+  delim = ((char *)pq_lookup_hash(&ARGHASH, "-d"))[1];
   ncols = pq_countcols(buffer, &delim);
   sprintf(defaults, cmd_defaults, ncols);
   pq_str2array(def_array, defaults, nargs, " ");

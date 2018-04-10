@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_htable.h>
+#include <pq_htable.h>
 
 #include <pq_args.h>
 #include <pq_generics.h>
@@ -33,7 +33,7 @@ void pq_swwrite_het(struct SWrap *wrap)
   sprintf(wrap->outs[0], "%d", wrap->nsam);
   sprintf(wrap->outs[1], "%lli", *(long long int *)wrap->values[0]);
 
-  if (strcmp((char *)rwk_lookup_hash(&ARGHASH, "-b"), "0") == 0) {
+  if (strcmp((char *)pq_lookup_hash(&ARGHASH, "-b"), "0") == 0) {
     het = *(double *)wrap->values[1];
   } else {
     het = *(double *)wrap->values[1] / *(long long int *)wrap->values[0];
