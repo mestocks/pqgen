@@ -95,11 +95,9 @@ codon2pnds - Count the number of silent and replacement substitutions and polymo
 
 ## Quick install
 
-**pqgen** makes use of the library **librawk**. To install this dependency, go [here](https://github.com/mspopgen/librawk).
-
-Once **librawk** is installed, download and unpack the latest version of **pqgen** (replacing *X*, *Y* and *Z* with the version number):
+Download and unpack the latest version of **pqgen** (replacing *X*, *Y* and *Z* with the version number):
 ```bash
-wget https://github.com/mspopgen/pqgen/releases/download/vX.Y.Z/pqgen-X.Y.Z.tar.gz
+wget https://github.com/mestocks/pqgen/releases/download/vX.Y.Z/pqgen-X.Y.Z.tar.gz
 tar -zxvf pqgen-X.Y.Z.tar.gz
 ```
 Then change into the **pqgen** directory, compile the source and install it:
@@ -110,4 +108,4 @@ make
 make install
 ```
 
-If **librawk** has been installed in a non-standard location then you may need to use './configure --prefix=<path/to/dir>'. Admin permissions may be required for the final installation step.
+The installation path can be changed using './configure --prefix=<path/to/dir>'. Admin permissions may be required for the 'make install' step.
