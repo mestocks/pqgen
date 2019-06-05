@@ -22,7 +22,7 @@ void update_theta(struct SWrap *wrap, char **array)
     if (nalt > 0 && nref > 0) {
       *(long long int *)wrap->values[1] += 1;
     }
-    *(long long int *)wrap->values[2] += pqPairwiseDiffs(wrap->nsam, nref);
+    *(long long int *)wrap->values[2] += PairwiseDiffs(wrap->nsam, nref);
     //*(long long int *)wrap->values[2] += nref * (wrap->nsam - nref);
     *(long long int *)wrap->values[0] += 1;
   }
@@ -37,10 +37,10 @@ void write_theta(struct SWrap *wrap)
   nvsites = *(long long int *)wrap->values[0];
   s =  *(long long int *)wrap->values[1];
   pisum =  *(long long int *)wrap->values[2];
-  tw = pqWattersonsTheta(wrap->nsam, s);
-  combs = pqPairwiseCombs(wrap->nsam);
-  pi = pqTajimasTheta(combs, pisum);
-  tajd = pqTajimasD(wrap->nsam, s, tw, pi);
+  tw = WattersonsTheta(wrap->nsam, s);
+  combs = PairwiseCombs(wrap->nsam);
+  pi = TajimasTheta(combs, pisum);
+  tajd = TajimasD(wrap->nsam, s, tw, pi);
 
   sprintf(wrap->outs[0], "%d", wrap->nsam);
   sprintf(wrap->outs[1], "%lli", nvsites);

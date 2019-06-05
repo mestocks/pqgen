@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-double pqWattersonsTheta(int nsam, int s) {
+double WattersonsTheta(int nsam, int s) {
   int i;
   double a1, tw;
 
@@ -20,12 +20,12 @@ double pqWattersonsTheta(int nsam, int s) {
   return tw;
 }
 
-long long int pqPairwiseDiffs(int nsam, int nminor) {
+long long int PairwiseDiffs(int nsam, int nminor) {
   long long int diffs = nminor * (nsam - nminor);
   return diffs;
 }
 
-double pqPairwiseCombs(int nsam) {
+double PairwiseCombs(int nsam) {
   // n choose 2: (n - (k - i)) / i
   // i = 1: n - (2 - 1) / 1 = n - 1
   // i = 2: n - (2 - 2) / 2 = n / 2
@@ -33,11 +33,11 @@ double pqPairwiseCombs(int nsam) {
   return combs;
 }
 
-double pqTajimasTheta(double combs, long long int diffs) {
+double TajimasTheta(double combs, long long int diffs) {
   return diffs / (double)combs;
 }
 
-double pqTajimasD(int nsam, long long int s, double tw, double pi) {
+double TajimasD(int nsam, long long int s, double tw, double pi) {
   double a1, a2, b1, b2, c1, c2, e1, e2, V;
   
   a1 = 0;
