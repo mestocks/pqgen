@@ -13,7 +13,7 @@
 
 #include "pq_het.h"
 #include "pq_sfs.h"
-#include "pq_theta.h"
+#include "cmd_theta.h"
 
 #include "pq_help.h"
 #include "pq_version.h"

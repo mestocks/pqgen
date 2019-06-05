@@ -5,33 +5,33 @@ bin_PROGRAMS = bin/pqgen bin/dna2codon bin/dna2div bin/gen2hwe bin/codon2pnds
 
 bin_pqgen_SOURCES = \
 src/main.c\
-src/pq_div.c src/pq_het.c src/pq_pnds.c src/pq_sfs.c src/pq_theta.c\
+src/pq_div.c src/pq_het.c src/pq_pnds.c src/pq_sfs.c src/cmd_theta.c\
 src/pq_args.c src/pq_generics.c src/pq_genetics.c src/pq_htable.c\
 src/pq_parse.c src/pq_sfstats.c src/pq_version.c\
 include/pq_args.h include/pq_div.h include/pq_generics.h include/pq_genetics.h include/pq_htable.h\
 include/pq_help.h include/pq_het.h include/pq_limits.h include/pq_parse.h\
-include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/pq_theta.h include/pq_version.h
+include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/cmd_theta.h include/pq_version.h
 
 bin_codon2pnds_SOURCES = \
 src/codon2pnds.c\
-src/pq_div.c src/pq_het.c src/pq_pnds.c src/pq_sfs.c src/pq_theta.c\
+src/pq_div.c src/pq_het.c src/pq_pnds.c src/pq_sfs.c src/cmd_theta.c\
 src/pq_args.c src/pq_generics.c src/pq_genetics.c src/pq_htable.c\
 src/pq_parse.c src/pq_sfstats.c src/pq_version.c\
 include/pq_args.h include/pq_div.h include/pq_generics.h include/pq_genetics.h include/pq_htable.h\
 include/pq_help.h include/pq_het.h include/pq_limits.h include/pq_parse.h\
-include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/pq_theta.h include/pq_version.h
+include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/cmd_theta.h include/pq_version.h
 
 bin_dna2codon_SOURCES = \
 src/dna2codon.c src/pq_parse.c include/pq_parse.h
 
 bin_dna2div_SOURCES = \
 src/dna2div.c\
-src/pq_div.c src/pq_het.c src/pq_pnds.c src/pq_sfs.c src/pq_theta.c\
+src/pq_div.c src/pq_het.c src/pq_pnds.c src/pq_sfs.c src/cmd_theta.c\
 src/pq_args.c src/pq_generics.c src/pq_genetics.c src/pq_htable.c\
 src/pq_parse.c src/pq_sfstats.c src/pq_version.c\
 include/pq_args.h include/pq_div.h include/pq_generics.h include/pq_genetics.h\
 include/pq_help.h include/pq_het.h include/pq_limits.h include/pq_parse.h\
-include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/pq_theta.h include/pq_version.h
+include/pq_pnds.h include/pq_sfs.h include/pq_sfstats.h include/cmd_theta.h include/pq_version.h
 
 bin_gen2hwe_SOURCES = \
 src/gen2hwe.c src/pq_parse.c include/pq_parse.h
