@@ -40,11 +40,11 @@ struct pq_command CMD[] =
      .init = pq_sfs_init,
      .defs = PQ_SFS_DEFS},
     
-    {.name = PQ_THETA_NAME,
-     .desc = PQ_THETA_DESC,
-     .frmt = PQ_THETA_FRMT,
-     .init = pq_theta_init,
-     .defs = PQ_THETA_DEFS}
+    {.name = THETA_NAME,
+     .desc = THETA_DESC,
+     .frmt = THETA_FRMT,
+     .init = init_theta,
+     .defs = THETA_DEFS}
   };
 
 void display_help()

@@ -10,7 +10,7 @@
 #include "pq_sfstats.h"
 
 
-void pq_swupdate_theta(struct SWrap *wrap, char **array)
+void update_theta(struct SWrap *wrap, char **array)
 {
   int nref, nalt;
 
@@ -29,7 +29,7 @@ void pq_swupdate_theta(struct SWrap *wrap, char **array)
 }
 
 
-void pq_swwrite_theta(struct SWrap *wrap)
+void write_theta(struct SWrap *wrap)
 {
   long long int s, pisum, nvsites;
   double tw, combs, pi, tajd;
@@ -56,7 +56,7 @@ void pq_swwrite_theta(struct SWrap *wrap)
 }
 
 
-void pq_swclear_theta(struct SWrap *wrap)
+void clear_theta(struct SWrap *wrap)
 {
   int i;
   for (i = 0; i < 3; i++) {
@@ -71,7 +71,7 @@ void pq_swclear_theta(struct SWrap *wrap)
 // values = [nvsites, s, pisum, nhet, nref, nalt]
 // out    = [nsam, nvsites, s, tw, pi, tajd]
 
-void pq_theta_init(struct SWrap *wrap, int nsam)
+void init_theta(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;
@@ -92,8 +92,8 @@ void pq_theta_init(struct SWrap *wrap, int nsam)
     *(int *)wrap->values[i] = 0;
   }
   
-  wrap->update = pq_swupdate_theta;
-  wrap->write = pq_swwrite_theta;
-  wrap->clear = pq_swclear_theta;
+  wrap->update = update_theta;
+  wrap->write = write_theta;
+  wrap->clear = clear_theta;
 }
 
