@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_htable.h>
-#include <pq_generics.h>
-#include <pq_args.h>
+#include "pq_htable.h"
+#include "pq_generics.h"
+#include "pq_args.h"
 
 void pq_swupdate_div(struct SWrap *wrap, char **array)
 {

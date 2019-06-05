@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
-#include <pq_args.h>
-#include <pq_generics.h>
-#include <pq_genetics.h>
-#include <pq_sfstats.h>
+#include "pq_args.h"
+#include "pq_generics.h"
+#include "pq_genetics.h"
+#include "pq_sfstats.h"
 
 
 void pq_swupdate_theta(struct SWrap *wrap, char **array)

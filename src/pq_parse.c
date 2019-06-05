@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
-#include <pq_parse.h>
+
+#include "pq_parse.h"
 
 int pq_countcols(const char *buffer, const char *delim)
 {

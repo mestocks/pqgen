@@ -3,15 +3,15 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
-#include <pq_args.h>
-#include <pq_parse.h>
-#include <pq_limits.h>
-#include <pq_generics.h>
-#include <pq_genetics.h>
-#include <pq_pnds.h>
-#include <pq_version.h>
+#include "pq_args.h"
+#include "pq_parse.h"
+#include "pq_limits.h"
+#include "pq_generics.h"
+#include "pq_genetics.h"
+#include "pq_pnds.h"
+#include "pq_version.h"
 
 
 int main(int argc, char **argv)

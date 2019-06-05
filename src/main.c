@@ -3,20 +3,20 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
-#include <pq_args.h>
-#include <pq_parse.h>
-#include <pq_limits.h>
-#include <pq_generics.h>
-#include <pq_genetics.h>
+#include "pq_args.h"
+#include "pq_parse.h"
+#include "pq_limits.h"
+#include "pq_generics.h"
+#include "pq_genetics.h"
 
-#include <pq_het.h>
-#include <pq_sfs.h>
-#include <pq_theta.h>
+#include "pq_het.h"
+#include "pq_sfs.h"
+#include "pq_theta.h"
 
-#include <pq_help.h>
-#include <pq_version.h>
+#include "pq_help.h"
+#include "pq_version.h"
 
 struct pq_command {
   int frmt;

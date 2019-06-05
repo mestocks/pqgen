@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <pq_args.h>
-#include <pq_generics.h>
-#include <pq_genetics.h>
+#include "pq_args.h"
+#include "pq_generics.h"
+#include "pq_genetics.h"
 
 
 void pq_swupdate_sfs(struct SWrap *wrap, char **array)

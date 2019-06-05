@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <pq_generics.h>
+#include "pq_generics.h"
 
 
 void pq_print_bed(struct Data *data)

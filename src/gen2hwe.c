@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <pq_parse.h>
+#include "pq_parse.h"
 
 #define COLOR "\x1B[33m"
 #define NORMAL "\x1B[0m"
