@@ -1,0 +1,58 @@
+.TH pqgen 1
+
+.SH NAME
+pqgen \- Population and Quantitative Genetics Tools
+
+.SH SYNOPSIS
+.PP
+.B pqgen
+.RB [ --version ]
+.RB [ --help ]
+.RI < command >
+.RI [ OPTIONS ]
+
+.SH DESCRIPTION
+.PP
+pqgen calculates population and quantitative genetic statistics from streams of genomic data. The focus is on speed and ease of use.
+
+.SH COMMANDS
+.PP
+\fBpqgen-het\fR(1)
+.RS 4
+Calculate heterozygosity.
+.RE
+.PP
+\fBpqgen-sfs\fR(1)
+.RS 4
+Output the folded site frequency spectrum.
+.RE
+.PP
+\fBpqgen-theta\fR(1)
+.RS 4
+Calculate site frequency based statistics.
+.RE
+.SH COMMON OPTIONS
+
+.TP
+.B -c \fINUM\fR
+
+.R Column number (1-indexed) giving the chromosome.
+
+.TP
+.B -f \fINUM\fR
+
+.R Column number (1-indexed) of the factor over which the stats should be calculated. By default, output per chromosome.
+
+.TP
+.B -k \fIRANGE\fR
+
+.R 1-indexed column numbers indicating the columns over which the statistic should be calculated. Columns can be separated by commas, and ranges specified using dashes. For example, -k 2,5-7 would specify columns 2, 5, 6 and 7.
+
+.TP
+.B -p \fINUM\fR
+
+.R Column number (1-indexed) giving the 1-indexed reference position.
+
+.SH Author
+.PP
+Michael Stocks
