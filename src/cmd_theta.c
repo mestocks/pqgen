@@ -12,19 +12,19 @@
 
 void update_theta(struct SWrap *wrap, char **array)
 {
-  int nref, nalt;
+  int refalt[2];
 
-  pq_gtstat(&wrap->values[3], array);
-  nref = *(int *)wrap->values[4];
-  nalt = *(int *)wrap->values[5];
-    
-  if (nref + nalt == wrap->nsam) {
-    if (nalt > 0 && nref > 0) {
+  refalt[0] = refalt[1] = 0;
+  count_alleles_from_genotypes(refalt, array);
+  //  gt_to_loopalt(refalt, array);
+
+  // Missing data?
+  if (refalt[0] + refalt[1] == wrap->nsam) {
+    if (refalt[1] > 0 && refalt[0] > 0) {
       *(long long int *)wrap->values[1] += 1;
     }
-    *(long long int *)wrap->values[2] += PairwiseDiffs(wrap->nsam, nref);
-    //*(long long int *)wrap->values[2] += nref * (wrap->nsam - nref);
     *(long long int *)wrap->values[0] += 1;
+    *(long long int *)wrap->values[2] += PairwiseDiffs(wrap->nsam, refalt[0]);
   }
 }
 

@@ -169,7 +169,89 @@ void pq_gtstat(void **info, char **array)
   free(genos);
 }
 
+/* 
+ * Assumes ref is 0 and anything non-zero is alt. Therefore,
+ * different non-zero alleles are considered the same and will
+ * not appear as a segregating site if the ref allele is not present.
+ * For example:
+ *    0/0 0/0   [4, 0]   no segregating site
+ *    0/0 0/1   [3. 1]   segregating site
+ *    0/0 0/2   [3. 1]   segregating site
+ *    1/1 1/1   [0, 4]   no segregating site
+ *    1/2 1/2   [0, 4]   no segregating site
+ */
+void count_refalt_from_genotypes(int *refalt, char **array)
+{
+  char *curr;
+  int i, a1, a2;
+  
+  for (i = 0; i < NKARGS; i++) {
+    curr = array[KCOLS[i]];
+    if (curr[0] != '.') {
+      a1 = curr[0] - '0';
+      a2 = curr[2] - '0';
+      refalt[a1 == 0]++;
+      refalt[a2 == 0]++;
+    }
+  }
+}
 
+/*
+ * Assumes there are only 2 alleles and uses the first allele that 
+ * is encountered as the ref allele. Therefore, if there are more 
+ * than 2 alleles then all non-ref alleles will be lumped together.
+ * For example:
+ *    0/0 0/0   [4, 0]
+ *    0/0 0/1   [3, 1]
+ *    1/2 1/2   [2, 2]
+ *    1/2 2/3   [1, 3]
+ */
+void count_alleles_from_genotypes(int *refalt, char **array)
+{
+  char *curr;
+  int i, a1, a2, is_first, ref;
+
+  ref = is_first = 1;
+  for (i = 0; i < NKARGS; i++) {
+    curr = array[KCOLS[i]];
+    if (curr[0] != '.') {
+      a1 = curr[0] - '0';
+      a2 = curr[2] - '0';
+      if (is_first) {
+	ref = a1;
+	is_first = 0;
+      }
+      refalt[a1 == ref]++;
+      refalt[a2 == ref]++;
+    }
+  }
+}
+
+void gt_to_loopalt(int *refalt, char **array)
+{
+  char *curr;
+  int i, a1, a2, is_first, ref;
+
+  size_t n;
+
+  n = 0;
+  while (array[KCOLS[n]][0] == '.' && n < NKARGS) {
+    n++;
+  }
+  
+  if (n < NKARGS) {
+    ref = array[KCOLS[n]][0] - '0';
+    for (i = n; i < NKARGS; i++) {
+      curr = array[KCOLS[i]];
+      if (curr[0] != '.') {
+	a1 = curr[0] - '0';
+	a2 = curr[2] - '0';
+	refalt[a1 == ref]++;
+	refalt[a2 == ref]++;
+      }
+    }
+  }
+}
 
 struct HashTable CODON_TO_NSYN;
 struct HashTable CODON_TO_AMINO;

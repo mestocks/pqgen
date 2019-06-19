@@ -11,6 +11,9 @@ extern void pq_reverse(char *codon);
 extern unsigned int pq_alldna(const char *dna);
 
 extern void pq_gtstat(void **info, char **array);
+extern void count_refalt_from_genotypes(int *refalt, char **array);
+extern void count_alleles_from_genotypes(int *refalt, char **array);
+extern void gt_to_loopalt(int *refalt, char **array);
 
 extern struct HashTable CODON_TO_NSYN;
 extern struct HashTable CODON_TO_AMINO;
