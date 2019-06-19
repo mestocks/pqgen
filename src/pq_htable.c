@@ -4,7 +4,7 @@
 #include <string.h>
 #include <limits.h>
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
 const uint64_t FNV_PRIME = 1099511628211;
 const uint64_t FNV_OFFSET = 14695981039346656037;

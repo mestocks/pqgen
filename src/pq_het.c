@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
-#include <pq_args.h>
-#include <pq_generics.h>
-#include <pq_genetics.h>
+#include "pq_args.h"
+#include "pq_generics.h"
+#include "pq_genetics.h"
 
 
 void pq_swupdate_het(struct SWrap *wrap, char **array)

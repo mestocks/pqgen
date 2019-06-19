@@ -28,7 +28,7 @@ chr1      676157  676160  transcript1       0.65   +       ACG     ACA
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_parse.h>
+#include "pq_parse.h"
 
 void _complement(char *codon) {
   int bp;

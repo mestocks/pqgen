@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <pq_parse.h>
-#include <pq_htable.h>
+#include "pq_parse.h"
+#include "pq_htable.h"
 
 int *KCOLS;
 int NKARGS;

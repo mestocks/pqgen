@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include <pq_version.h>
+#include "pq_version.h"
 
 void pq_display_version()
 {

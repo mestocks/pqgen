@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_parse.h>
+#include "pq_parse.h"
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
-#include <pq_args.h>
-#include <pq_genetics.h>
+#include "pq_args.h"
+#include "pq_genetics.h"
 
 unsigned int pq_alldna(const char *dna) {
   const char *tmp;

@@ -2,15 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <pq_htable.h>
+#include "pq_htable.h"
 
-#include <pq_args.h>
-#include <pq_generics.h>
-#include <pq_genetics.h>
-#include <pq_sfstats.h>
+#include "pq_args.h"
+#include "pq_generics.h"
+#include "pq_genetics.h"
+#include "pq_sfstats.h"
 
 
-void pq_swupdate_theta(struct SWrap *wrap, char **array)
+void update_theta(struct SWrap *wrap, char **array)
 {
   int nref, nalt;
 
@@ -22,14 +22,14 @@ void pq_swupdate_theta(struct SWrap *wrap, char **array)
     if (nalt > 0 && nref > 0) {
       *(long long int *)wrap->values[1] += 1;
     }
-    *(long long int *)wrap->values[2] += pqPairwiseDiffs(wrap->nsam, nref);
+    *(long long int *)wrap->values[2] += PairwiseDiffs(wrap->nsam, nref);
     //*(long long int *)wrap->values[2] += nref * (wrap->nsam - nref);
     *(long long int *)wrap->values[0] += 1;
   }
 }
 
 
-void pq_swwrite_theta(struct SWrap *wrap)
+void write_theta(struct SWrap *wrap)
 {
   long long int s, pisum, nvsites;
   double tw, combs, pi, tajd;
@@ -37,10 +37,10 @@ void pq_swwrite_theta(struct SWrap *wrap)
   nvsites = *(long long int *)wrap->values[0];
   s =  *(long long int *)wrap->values[1];
   pisum =  *(long long int *)wrap->values[2];
-  tw = pqWattersonsTheta(wrap->nsam, s);
-  combs = pqPairwiseCombs(wrap->nsam);
-  pi = pqTajimasTheta(combs, pisum);
-  tajd = pqTajimasD(wrap->nsam, s, tw, pi);
+  tw = WattersonsTheta(wrap->nsam, s);
+  combs = PairwiseCombs(wrap->nsam);
+  pi = TajimasTheta(combs, pisum);
+  tajd = TajimasD(wrap->nsam, s, tw, pi);
 
   sprintf(wrap->outs[0], "%d", wrap->nsam);
   sprintf(wrap->outs[1], "%lli", nvsites);
@@ -56,7 +56,7 @@ void pq_swwrite_theta(struct SWrap *wrap)
 }
 
 
-void pq_swclear_theta(struct SWrap *wrap)
+void clear_theta(struct SWrap *wrap)
 {
   int i;
   for (i = 0; i < 3; i++) {
@@ -71,7 +71,7 @@ void pq_swclear_theta(struct SWrap *wrap)
 // values = [nvsites, s, pisum, nhet, nref, nalt]
 // out    = [nsam, nvsites, s, tw, pi, tajd]
 
-void pq_theta_init(struct SWrap *wrap, int nsam)
+void init_theta(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;
@@ -92,8 +92,8 @@ void pq_theta_init(struct SWrap *wrap, int nsam)
     *(int *)wrap->values[i] = 0;
   }
   
-  wrap->update = pq_swupdate_theta;
-  wrap->write = pq_swwrite_theta;
-  wrap->clear = pq_swclear_theta;
+  wrap->update = update_theta;
+  wrap->write = write_theta;
+  wrap->clear = clear_theta;
 }
 
