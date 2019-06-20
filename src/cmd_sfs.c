@@ -6,7 +6,7 @@
 #include "pq_genetics.h"
 
 
-void pq_swupdate_sfs(struct SWrap *wrap, char **array)
+void update_sfs(struct SWrap *wrap, char **array)
 {
   int nref, nalt;
 
@@ -24,7 +24,7 @@ void pq_swupdate_sfs(struct SWrap *wrap, char **array)
   }
 }
 
-void pq_swwrite_sfs(struct SWrap *wrap)
+void write_sfs(struct SWrap *wrap)
 {
   int i;
   sprintf(wrap->outs[0], "%d", wrap->nsam);
@@ -34,7 +34,7 @@ void pq_swwrite_sfs(struct SWrap *wrap)
   }
 }
 
-void pq_swclear_sfs(struct SWrap *wrap)
+void clear_sfs(struct SWrap *wrap)
 {
   int i;
   *(long long int *)wrap->values[0] = 0;
@@ -50,7 +50,7 @@ void pq_swclear_sfs(struct SWrap *wrap)
 // nouts   = [nsam, nvsites, sfs1, sfs2, ...]
 // sfs: number of occurances [0, 1, ..., n + 1]
 
-void pq_sfs_init(struct SWrap *wrap, int nsam)
+void init_sfs(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;
@@ -72,7 +72,7 @@ void pq_sfs_init(struct SWrap *wrap, int nsam)
     wrap->values[i] = malloc(sizeof(long long int));
     *(long long int *)wrap->values[i] = 0;
   }
-  wrap->update = pq_swupdate_sfs;
-  wrap->write = pq_swwrite_sfs;
-  wrap->clear = pq_swclear_sfs;
+  wrap->update = update_sfs;
+  wrap->write = write_sfs;
+  wrap->clear = clear_sfs;
 }

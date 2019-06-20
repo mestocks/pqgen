@@ -9,7 +9,7 @@
 #include "pq_genetics.h"
 
 
-void pq_swupdate_het(struct SWrap *wrap, char **array)
+void update_het(struct SWrap *wrap, char **array)
 {
   int nhet, nref, nalt;
   double het;
@@ -27,7 +27,7 @@ void pq_swupdate_het(struct SWrap *wrap, char **array)
 }
 
 
-void pq_swwrite_het(struct SWrap *wrap)
+void write_het(struct SWrap *wrap)
 {
   double het;
   sprintf(wrap->outs[0], "%d", wrap->nsam);
@@ -42,7 +42,7 @@ void pq_swwrite_het(struct SWrap *wrap)
 }
 
 
-void pq_swclear_het(struct SWrap *wrap)
+void clear_het(struct SWrap *wrap)
 {
   *(long long int *)wrap->values[0] = 0;
   *(double *)wrap->values[1] = 0.0;
@@ -52,7 +52,7 @@ void pq_swclear_het(struct SWrap *wrap)
 // nvalues = [nvsites, het, nhet, nref, nalt]
 // nouts   = [nsam, nvsites, uhet]
 
-void pq_het_init(struct SWrap *wrap, int nsam)
+void init_het(struct SWrap *wrap, int nsam)
 {
   int i;
   wrap->nsam = nsam;
@@ -75,8 +75,8 @@ void pq_het_init(struct SWrap *wrap, int nsam)
     *(int *)wrap->values[i] = 0;
   }
   
-  wrap->update = pq_swupdate_het;
-  wrap->write = pq_swwrite_het;
-  wrap->clear = pq_swclear_het;
+  wrap->update = update_het;
+  wrap->write = write_het;
+  wrap->clear = clear_het;
 }
 

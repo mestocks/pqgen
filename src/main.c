@@ -28,17 +28,17 @@ struct pq_command {
 
 struct pq_command CMD[] =
   {
-    {.name = PQ_HET_NAME,
-     .desc = PQ_HET_DESC,
-     .frmt = PQ_HET_FRMT,
-     .init = pq_het_init,
-     .defs = PQ_HET_DEFS},
+    {.name = HET_NAME,
+     .desc = HET_DESC,
+     .frmt = HET_FRMT,
+     .init = init_het,
+     .defs = HET_DEFS},
 
-    {.name = PQ_SFS_NAME,
-     .desc = PQ_SFS_DESC,
-     .frmt = PQ_SFS_FRMT,
-     .init = pq_sfs_init,
-     .defs = PQ_SFS_DEFS},
+    {.name = SFS_NAME,
+     .desc = SFS_DESC,
+     .frmt = SFS_FRMT,
+     .init = init_sfs,
+     .defs = SFS_DEFS},
     
     {.name = THETA_NAME,
      .desc = THETA_DESC,
