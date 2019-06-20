@@ -1,20 +1,19 @@
 #ifndef pq_generics_h__
 #define pq_generics_h__
 
-// StatObject
 
-struct SWrap {
+struct StatObject {
   int nsam;
   int nouts;
   int nvalues;
   char **outs;
   void **values;
-  void (*update)(struct SWrap *, char **);
-  void (*write)(struct SWrap *);
-  void (*clear)(struct SWrap *);
+  void (*update)(struct StatObject *, char **);
+  void (*write)(struct StatObject *);
+  void (*clear)(struct StatObject *);
 };
 
-extern void pq_swfree(struct SWrap *wrap);
+extern void pq_swfree(struct StatObject *stats);
 
 
 struct Data {

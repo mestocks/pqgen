@@ -23,7 +23,7 @@ struct pq_command {
   const char *name;
   const char *desc;
   const char *defs;
-  void (*init)(struct SWrap *, int);
+  void (*init)(struct StatObject *, int);
 };
 
 struct pq_command CMD[] =
@@ -84,16 +84,16 @@ int main(int argc, char **argv)
   int ncmds;
   int frm_multi;
   const char *cmd_defaults;
-  struct SWrap Stat;
+  struct StatObject Stat;
   
-  void (*swrap_init)(struct SWrap *, int);
+  void (*stat_init)(struct StatObject *, int);
   
   i = 0;
   ncmds = sizeof(CMD) / sizeof(CMD[0]);
   while (i < ncmds) {
     if (strcmp(argv[1], CMD[i].name) == 0) {
       frm_multi = CMD[i].frmt;
-      swrap_init = CMD[i].init;
+      stat_init = CMD[i].init;
       cmd_defaults = CMD[i].defs;
       break;
     }
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
   init_row(&row, ncols, CHROM, POS, FCOL);
   
   nalleles = frm_multi * NKARGS;
-  swrap_init(&Stat, nalleles);
+  stat_init(&Stat, nalleles);
 
   row.update(&row, buffer, &delim);
   strcpy(chr, row.chrom(&row));

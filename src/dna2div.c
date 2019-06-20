@@ -28,12 +28,12 @@ int main(int argc, char **argv)
   int i;
   int frm_multi;
   const char *cmd_defaults;
-  struct SWrap Stat;
+  struct StatObject Stat;
   
-  void (*swrap_init)(struct SWrap *, int);
+  void (*stat_init)(struct StatObject *, int);
 
   frm_multi = PQ_DIV_FRMT;
-  swrap_init = PQ_DIV_INIT;
+  stat_init = PQ_DIV_INIT;
   cmd_defaults = PQ_DIV_DEFS;
 
   FILE *fp;
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
   init_row(&row, ncols, CHROM, POS, FCOL);
   
   nalleles = frm_multi * NKARGS;
-  swrap_init(&Stat, nalleles);
+  stat_init(&Stat, nalleles);
 
   row.update(&row, buffer, &delim);
   strcpy(chr, row.chrom(&row));

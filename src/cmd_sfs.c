@@ -6,43 +6,43 @@
 #include "pq_genetics.h"
 
 
-void update_sfs(struct SWrap *wrap, char **array)
+void update_sfs(struct StatObject *stats, char **array)
 {
   int nref, nalt;
 
-  pq_gtstat(&wrap->values[1], array);
-  nref = *(int *)wrap->values[2];
-  nalt = *(int *)wrap->values[3];
+  pq_gtstat(&stats->values[1], array);
+  nref = *(int *)stats->values[2];
+  nalt = *(int *)stats->values[3];
   
-  if (nref + nalt == wrap->nsam) {
+  if (nref + nalt == stats->nsam) {
     if (nref < nalt) {
-      *(long long int *)wrap->values[4 + nref] += 1;
+      *(long long int *)stats->values[4 + nref] += 1;
     } else {
-      *(long long int *)wrap->values[4 + nalt] += 1;
+      *(long long int *)stats->values[4 + nalt] += 1;
     }
-    *(long long int *)wrap->values[0] += 1;
+    *(long long int *)stats->values[0] += 1;
   }
 }
 
-void write_sfs(struct SWrap *wrap)
+void write_sfs(struct StatObject *stats)
 {
   int i;
-  sprintf(wrap->outs[0], "%d", wrap->nsam);
-  sprintf(wrap->outs[1], "%lli", *(long long int *)wrap->values[0]);
-  for (i = 2; i < wrap->nouts; i++) {
-    sprintf(wrap->outs[i], "%lli", *(long long int *)wrap->values[i + 2]);
+  sprintf(stats->outs[0], "%d", stats->nsam);
+  sprintf(stats->outs[1], "%lli", *(long long int *)stats->values[0]);
+  for (i = 2; i < stats->nouts; i++) {
+    sprintf(stats->outs[i], "%lli", *(long long int *)stats->values[i + 2]);
   }
 }
 
-void clear_sfs(struct SWrap *wrap)
+void clear_sfs(struct StatObject *stats)
 {
   int i;
-  *(long long int *)wrap->values[0] = 0;
+  *(long long int *)stats->values[0] = 0;
   for (i = 1; i < 4; i++) {
-    *(int *)wrap->values[i] = 0;
+    *(int *)stats->values[i] = 0;
   }
-  for (i = 4; i < wrap->nvalues; i++) {
-    *(long long int *)wrap->values[i] = 0;
+  for (i = 4; i < stats->nvalues; i++) {
+    *(long long int *)stats->values[i] = 0;
   }
 }
 
@@ -50,29 +50,29 @@ void clear_sfs(struct SWrap *wrap)
 // nouts   = [nsam, nvsites, sfs1, sfs2, ...]
 // sfs: number of occurances [0, 1, ..., n + 1]
 
-void init_sfs(struct SWrap *wrap, int nsam)
+void init_sfs(struct StatObject *stats, int nsam)
 {
   int i;
-  wrap->nsam = nsam;
-  wrap->nouts = 2 + ((nsam / 2) + 1);
-  wrap->nvalues = 4 + ((nsam / 2) + 1);
-  wrap->outs = calloc(wrap->nouts, sizeof(char *));
-  wrap->values = calloc(wrap->nvalues, sizeof(void *));
-  for (i = 0; i < wrap->nouts; i++) {
-    wrap->outs[i] = calloc(128, sizeof(char));
+  stats->nsam = nsam;
+  stats->nouts = 2 + ((nsam / 2) + 1);
+  stats->nvalues = 4 + ((nsam / 2) + 1);
+  stats->outs = calloc(stats->nouts, sizeof(char *));
+  stats->values = calloc(stats->nvalues, sizeof(void *));
+  for (i = 0; i < stats->nouts; i++) {
+    stats->outs[i] = calloc(128, sizeof(char));
   }
   
-  wrap->values[0] = malloc(sizeof(long long int));
-  *(long long int *)wrap->values[0] = 0;
+  stats->values[0] = malloc(sizeof(long long int));
+  *(long long int *)stats->values[0] = 0;
   for (i = 1; i < 4; i++) {
-    wrap->values[i] = malloc(sizeof(int));
-    *(int *)wrap->values[i] = 0;
+    stats->values[i] = malloc(sizeof(int));
+    *(int *)stats->values[i] = 0;
   }
-  for (i = 4; i < wrap->nvalues; i++) {
-    wrap->values[i] = malloc(sizeof(long long int));
-    *(long long int *)wrap->values[i] = 0;
+  for (i = 4; i < stats->nvalues; i++) {
+    stats->values[i] = malloc(sizeof(long long int));
+    *(long long int *)stats->values[i] = 0;
   }
-  wrap->update = update_sfs;
-  wrap->write = write_sfs;
-  wrap->clear = clear_sfs;
+  stats->update = update_sfs;
+  stats->write = write_sfs;
+  stats->clear = clear_sfs;
 }

@@ -15,17 +15,17 @@ void pq_print_csv(struct Data *data)
 }
 
 
-void pq_swfree(struct SWrap *wrap)
+void pq_swfree(struct StatObject *stats)
 {
   int i;
-  for (i = 0; i < wrap->nouts; i++) {
-    free(wrap->outs[i]);
+  for (i = 0; i < stats->nouts; i++) {
+    free(stats->outs[i]);
   }
-  for (i = 0; i < wrap->nvalues; i++) {
-    free(wrap->values[i]);
+  for (i = 0; i < stats->nvalues; i++) {
+    free(stats->values[i]);
   }
-  free(wrap->outs);
-  free(wrap->values);
+  free(stats->outs);
+  free(stats->values);
 }
 
 
