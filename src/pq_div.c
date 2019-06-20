@@ -6,7 +6,7 @@
 #include "pq_generics.h"
 #include "pq_args.h"
 
-void pq_swupdate_div(struct SWrap *wrap, char **array)
+void pq_swupdate_div(struct StatObject *stats, char **array)
 {
 
   char *ref;
@@ -17,50 +17,50 @@ void pq_swupdate_div(struct SWrap *wrap, char **array)
 
   if (strcmp(ref, ".") != 0 && strcmp(alt, ".") != 0) {
     if (strcmp(ref, alt) != 0) {
-      *(long long int *)wrap->values[0]+=1;
+      *(long long int *)stats->values[0]+=1;
     }
-    *(long long int *)wrap->values[1]+=1;
+    *(long long int *)stats->values[1]+=1;
   }
 }
 
-void pq_swwrite_div(struct SWrap *wrap)
+void pq_swwrite_div(struct StatObject *stats)
 {
   long long int diffs, nvsites;
-  diffs =  *(long long int *)wrap->values[0];
-  nvsites =  *(long long int *)wrap->values[1];
-  sprintf(wrap->outs[0], "%lli", nvsites);
+  diffs =  *(long long int *)stats->values[0];
+  nvsites =  *(long long int *)stats->values[1];
+  sprintf(stats->outs[0], "%lli", nvsites);
   if (strcmp((char *)pq_lookup_hash(&ARGHASH, "-b"), "0") == 0) {
-    sprintf(wrap->outs[1], "%f", (double)diffs);
+    sprintf(stats->outs[1], "%f", (double)diffs);
   } else {
-    sprintf(wrap->outs[1], "%f", (double)diffs / (double)nvsites);
+    sprintf(stats->outs[1], "%f", (double)diffs / (double)nvsites);
   }
 }
 
-void pq_swclear_div(struct SWrap *wrap)
+void pq_swclear_div(struct StatObject *stats)
 {
   int i;
-  for (i = 0; i < wrap->nvalues; i++) {
-    *(long long int *)wrap->values[i] = 0;
+  for (i = 0; i < stats->nvalues; i++) {
+    *(long long int *)stats->values[i] = 0;
   }
 }
 
-void PQ_DIV_INIT(struct SWrap *wrap, int nsam)
+void PQ_DIV_INIT(struct StatObject *stats, int nsam)
 {
   // nvsites, diffs
   int i;
-  wrap->nsam = nsam;
-  wrap->nouts = 2;
-  wrap->nvalues = 2;
-  wrap->outs = calloc(wrap->nouts, sizeof(char *));
-  wrap->values = calloc(wrap->nvalues, sizeof(void *));
-  for (i = 0; i < wrap->nouts; i++) {
-    wrap->outs[i] = calloc(128, sizeof(char));
+  stats->nsam = nsam;
+  stats->nouts = 2;
+  stats->nvalues = 2;
+  stats->outs = calloc(stats->nouts, sizeof(char *));
+  stats->values = calloc(stats->nvalues, sizeof(void *));
+  for (i = 0; i < stats->nouts; i++) {
+    stats->outs[i] = calloc(128, sizeof(char));
   }
-  for (i = 0; i < wrap->nvalues; i++) {
-    wrap->values[i] = malloc(sizeof(long long int));
-    *(long long int *)wrap->values[i] = 0;
+  for (i = 0; i < stats->nvalues; i++) {
+    stats->values[i] = malloc(sizeof(long long int));
+    *(long long int *)stats->values[i] = 0;
   }
-  wrap->update = pq_swupdate_div;
-  wrap->write = pq_swwrite_div;
-  wrap->clear = pq_swclear_div;
+  stats->update = pq_swupdate_div;
+  stats->write = pq_swwrite_div;
+  stats->clear = pq_swclear_div;
 }

@@ -11,8 +11,8 @@
 #include "pq_generics.h"
 #include "pq_genetics.h"
 
-#include "pq_het.h"
-#include "pq_sfs.h"
+#include "cmd_het.h"
+#include "cmd_sfs.h"
 #include "cmd_theta.h"
 
 #include "pq_help.h"
@@ -23,22 +23,22 @@ struct pq_command {
   const char *name;
   const char *desc;
   const char *defs;
-  void (*init)(struct SWrap *, int);
+  void (*init)(struct StatObject *, int);
 };
 
 struct pq_command CMD[] =
   {
-    {.name = PQ_HET_NAME,
-     .desc = PQ_HET_DESC,
-     .frmt = PQ_HET_FRMT,
-     .init = pq_het_init,
-     .defs = PQ_HET_DEFS},
+    {.name = HET_NAME,
+     .desc = HET_DESC,
+     .frmt = HET_FRMT,
+     .init = init_het,
+     .defs = HET_DEFS},
 
-    {.name = PQ_SFS_NAME,
-     .desc = PQ_SFS_DESC,
-     .frmt = PQ_SFS_FRMT,
-     .init = pq_sfs_init,
-     .defs = PQ_SFS_DEFS},
+    {.name = SFS_NAME,
+     .desc = SFS_DESC,
+     .frmt = SFS_FRMT,
+     .init = init_sfs,
+     .defs = SFS_DEFS},
     
     {.name = THETA_NAME,
      .desc = THETA_DESC,
@@ -84,16 +84,16 @@ int main(int argc, char **argv)
   int ncmds;
   int frm_multi;
   const char *cmd_defaults;
-  struct SWrap Stat;
+  struct StatObject Stat;
   
-  void (*swrap_init)(struct SWrap *, int);
+  void (*stat_init)(struct StatObject *, int);
   
   i = 0;
   ncmds = sizeof(CMD) / sizeof(CMD[0]);
   while (i < ncmds) {
     if (strcmp(argv[1], CMD[i].name) == 0) {
       frm_multi = CMD[i].frmt;
-      swrap_init = CMD[i].init;
+      stat_init = CMD[i].init;
       cmd_defaults = CMD[i].defs;
       break;
     }
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
   init_row(&row, ncols, CHROM, POS, FCOL);
   
   nalleles = frm_multi * NKARGS;
-  swrap_init(&Stat, nalleles);
+  stat_init(&Stat, nalleles);
 
   row.update(&row, buffer, &delim);
   strcpy(chr, row.chrom(&row));
