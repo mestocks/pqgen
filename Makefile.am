@@ -43,3 +43,6 @@ bin_codon2pnds_CFLAGS = -I $(srcdir)/include
 bin_gen2hwe_CFLAGS = -I $(srcdir)/include
 
 dist_pkgdata_DATA = share/codon2aa share/codon2syn
+
+man_MANS = doc/pqgen.1 doc/pqgen-het.1 doc/pqgen-sfs.1 doc/pqgen-theta.1
+dist_man_MANS = doc/pqgen.1 doc/pqgen-het.1 doc/pqgen-sfs.1 doc/pqgen-theta.1
