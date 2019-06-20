@@ -1,5 +1,5 @@
-#ifndef pq_het_h__
-#define pq_het_h__
+#ifndef cmd_het_h__
+#define cmd_het_h__
 
 #define PQ_HET_FRMT 1
 #define PQ_HET_NAME "het"

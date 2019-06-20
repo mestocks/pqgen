@@ -1,5 +1,5 @@
-#ifndef pq_sfs_h__
-#define pq_sfs_h__
+#ifndef cmd_sfs_h__
+#define cmd_sfs_h__
 
 #define PQ_SFS_FRMT 2
 #define PQ_SFS_NAME "sfs"

@@ -11,8 +11,8 @@
 #include "pq_generics.h"
 #include "pq_genetics.h"
 
-#include "pq_het.h"
-#include "pq_sfs.h"
+#include "cmd_het.h"
+#include "cmd_sfs.h"
 #include "cmd_theta.h"
 
 #include "pq_help.h"
